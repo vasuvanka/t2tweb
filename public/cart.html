@@ -1,0 +1,111 @@
+﻿<section>
+    <div class="container">
+        <div class="row clearfix content-panel">
+            <div class="col-md-5">
+                <table class="rwd-table">
+                        <tbody>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Sub Total</th>
+                            </tr>
+                            <tr ng-repeat = "item in cartList">
+                                <td data-th="Product">{{item.name}}</td>
+                                <td data-th="Price">{{item.cost}}</td>
+                                <td data-th="Quantity">
+                                    <i class="fa fa-minus-circle" aria-hidden="true" ng-click="countFunc(false,item);"></i>
+                                    {{item.qty}}
+                                    <i class="fa fa-plus-circle" aria-hidden="true" ng-click="countFunc(true,item);"></i>
+                                </td>
+                                <td data-th="Quantity">{{item.qty * item.cost}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-right"><label>Delivery</label></td>
+                                <td data-th="Delivery">Rs.{{deliveryFee}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-right"><label>Total</label></td>
+                                <td data-th="Total">Rs.{{totalCost}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <small class="primary">*Inclusive of all taxes and charges</small>
+            </div>
+            <div class="col-md-5 pull-right">
+            <form ng-submit="placeOrder(order)">
+                    <div class="row gutter-bottom">
+                        <div class="col-md-6">Choose delivery date</div>
+                        <div class="col-md-6">
+                            <input type="date" id="exampleInput" name="input" ng-model="order.deliveryDate" placeholder="yyyy-MM-dd" ng-change="getSlots()" class="form-control" required />
+                           <div role="alert">
+                             <span class="error" ng-show="myForm.input.$error.required">
+                                 Required!</span>
+                             <span class="error" ng-show="myForm.input.$error.date">
+                                 Not a valid date!</span>
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-md-6">
+                            <datepicker date-format="MM/dd/yyyy">
+                            <input  type="text" ng-model="order.deliveryDate">
+                            </datepicker>
+                        </div> -->
+                    </div>
+                    <div class="row gutter-bottom">
+                        <div class="col-md-6">Choose delivery time slot</div>
+                        <div class="col-md-6">
+                            <select ng-model="order.slot" class="form-control" required>
+                            <option value="">Select Delivery Slot</option>
+                                <option ng-repeat="slot in slots" value="{{slot}}">{{slot.startHrs +" : "+slot.startMins+" - "+slot.stopHrs+" : "+slot.stopMins}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row gutter-bottom">
+                        <div class="col-md-6">Coupon code</div>
+                        <div class="col-md-6">
+                            <input type="text" ng-change="validateCoupon(order.coupon)" ng-model="order.coupon" placeholder="Enter Coupon code" class="form-control">
+                        </div>
+                        <span ng-show="isCouponError" class="danger">{{couponMsg}}</span>
+                    </div>
+                    <div class="panel panel-default gutter-vertical" ng-repeat="address in addresses">
+                      <div class="panel-body">
+                            <p>{{address.label}} <span class="pull-right">Select&nbsp;<input class="btn" type="radio" ng-model="order.address" name="address" value="{{address}}" required=""></span></p>
+                            <p>
+                            {{address.lane1}}, 
+                            {{address.lane2 || ""}},{{address.city}}, {{address.state}}. {{address.pincode}} 
+                            </p>      
+                            <p>{{address.phone}}</p>
+                            <span class="label label-default">{{address.label}}</span>
+                      </div>
+                    </div>
+                    <div class="clearfix text-right" style="border-top: 1px solid #efefef; padding: 10px 0;">
+                            <a href class="btn btn-default btn-small" ng-show="username" ng-click="openAddress()">Add Address  <i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="content-panel2">
+                        <div class="btn-group gutter-bottom" data-toggle="buttons">
+                            <label class="btn btn-md btn-default">
+                              <input type="radio" ng-model="order.paymentMode" ng-change="updatePaymentType('cod')" name="paymentMode" value="cod" required> COD
+                            </label>
+                            <label class="btn btn-md btn-default">
+                              <input type="radio" ng-change="updatePaymentType('paytm')" ng-model="order.paymentMode" value="paytm" name="paymentMode" required> Paytm
+                            </label>
+                        </div>
+                        <div class="clearfix" style="height: 50px;">
+                             <div class="clearfix" style="display: none;">
+                                * Order with {{order.paymentMode}} selected, click on Place Order to continue. 
+                            </div> 
+                        </div>   
+                      <div class="row text-center">
+                        <button type="button" ng-click="continueShop()" class="btn btn-primary btn-lg" >Continue Shopping </button>      
+                        <input type="submit" value="Place Order" class="btn btn-primary btn-lg" /> 
+                      </div>        
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+                    

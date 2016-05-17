@@ -1,0 +1,44 @@
+﻿    <section>
+        <div class=" absolute-location pull-right">
+            <i class="fa fa-map-marker fa-lg" aria-hidden="true"></i> <span>{{location}}</span>
+            <a ui-sref="home">Change Location</a>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 form-center clearfix" style="margin-top: 150px;" >
+                    <div class="clearfix">
+                        <div class="col-md-3 col-xs-6 text-center text-white" ng-repeat="category in categories">
+                            <a href="" ng-click="getMenu(category)">
+                            <img ng-src="images/{{category+'.jpg'}}" alt="{{category}}" class="rounded-img" style="width: 130px; height: 130px;">
+                            <h3 class="">{{category.toUpperCase()}}</h3>
+                            </a>
+                        </div>
+                    </div>    
+                </div><!-- /.col-lg-6 -->
+            </div>
+        </div>
+    </section> 
+<section class="white-bg content-area">
+    <div class="container" >
+        <div class="row">
+            <div class="col-md-4 list-thumb"  ng-repeat="menu in menuList">
+                <div class="image-holder">
+                    <img ng-src="images/{{menu.product_id[0].imageUrl}}" alt="{{menu.cat}}" class="img-responsive">
+                    <span class="price">{{menu.product_id[0].cost}}</span>
+                    <span class="veg"></span>
+                </div>
+                <h3>{{menu.product_id[0].name}}</h3>
+                <div class="row">
+                    <p class="col-md-9">{{menu.product_id[0].description}}</p>
+                    <div class="col-md-3 text-right">
+                        <i class="fa fa-minus-circle" aria-hidden="true" ng-click="countFunc(false,menu);"></i>
+                        {{menu.product_id[0].qty}}
+                        <i class="fa fa-plus-circle" aria-hidden="true" ng-click="countFunc(true,menu);"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>  
+
+ 

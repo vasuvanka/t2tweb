@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 no-js" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js" lang="en" ng-app="t2tApp">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Time 2 Tiffin serves authentic South Indian in Hyderabad. We also take up online orders , South Indian Food Home Delivery, Hyderabad ; Tiffin Services Hyderabad" />
+    <meta property="og:description" content="Time 2 Tiffin serves authentic South Indian in Hyderabad. We also take up online orders , South Indian Food Home Delivery, Hyderabad ; Tiffin Services Hyderabad" />
+    <meta name="keywords" content="Authentic South Indian Food Tiffin Service in Hyderabad Online Tiffin Delivery in Hyderabad South Indian Breakfast Online Breakfast Delivery in Hyderabad" />
+    <meta name="author" content="venkat" />
+    <link rel="canonical" href="http://time2tiffin.in/" />
+    <meta property="og:url" content="http://time2tiffin.in/" />
+    <meta property="og:title" content="Time 2 Tiffin , Order Online for Home Delivery, Tiffin Service" />
+
+    <link rel="shortcut icon" href="http://time2tiffin.in/assets/user_images/favicons/original/Fac+1438062503.png">
+
+    <title>Time 2 Tiffin , Order Online for Home Delivery, Tiffin Service</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/css/bootstrap.min.css" />
+    <link href="styles/css/theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles/css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="styles/css/style1.css" />
+    <link rel="stylesheet" type="text/css" href="styles/css/angular-datepicker.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"> 
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body id="page" ng-controller="baseController">
+<!--     <ul class="cb-slideshow">
+        <li><span>Image 01</span><div><h3></h3></div></li>
+        <li><span>Image 02</span><div><h3></h3></div></li>
+        <li><span>Image 03</span><div><h3></h3></div></li>
+        <li><span>Image 04</span><div><h3></h3></div></li>
+    </ul> -->
+    <section class="" id="header-section">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <!-- <img src="images/time2tiffin-logo.png" alt="time2tiffin.in"> -->
+                        <img src="images/time2tiffin-logo-round.png" alt="time2tiffin.in">
+
+                    </a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class=""><a ui-sref="home">Home</a></li>
+                        <li class=""><a href="">Track</a></li>
+                        <!-- <li><a href="#" ui-sref="cart">Cart</a></li>
+                        <li><a href="#" ui-sref="listing">Listing</a></li>
+                        <li><a href="#" ui-sref="confirm">Cart Success</a></li> -->
+
+
+                        <!-- <li>{{45+35}}</li> -->
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class=""><a href >Contact Us</a></li>
+                        <li><a href ng-show="!username" ng-click="openRegistration()">Sign Up</a></li>
+                        <li><a href ng-click="openLogin()" ng-show="!username">Sign In</a></li>
+                        <li><a href="#/profile" >{{ username }}</a></li>
+                        <li><a href ng-show="username" ng-click="logout()">logout</a></li>
+                        <li><a href="#/cart" class="cart"><img src="images/cart.png" alt="cart"> <span>{{count}}</span></a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div><!--/.container-fluid -->
+        </nav>
+
+    </section>
+
+     <div ui-view=""></div>
+   <!-- <section class="white-bg footer">
+        <footer class="container">
+            <div class="col-md-5 border-right">
+                <p class="text-primary">Let us show you how we can help</p>
+                <div class="gutter-bottom">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button">Subscribe</button>
+                        </span>
+                    </div> --><!-- /input-group -->
+                <!-- </div>
+                <div class="clearfix gutter-bottom">
+                    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+                    <a href="#"><img src="images/twitter.png" alt="Twitter"></a>
+                    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+                    <a href="#"><img src="images/pinterest.png" alt="Pinterest"></a>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="clearfix">
+                    <div class="pull-left gutter-bottom">
+                        <img src="images/cards.jpg" alt="Cards" class="img-responsive">
+                    </div>
+                    <div class="pull-right gutter-bottom">
+                        <img src="images/google-play-badge.png" alt="Google Play">
+                        <img src="images/app-store-badge.png" alt="Appile Play Store">
+                    </div>
+                </div>
+                <div class="clearfix gutter-bottom">
+                    <a href="#">Jobs</a> | <a href="#">Cancellation, return and refund policy </a> | <a href="#">Terms and conditions</a> | <a href="#">FAQ and Help Center</a>
+                </div>
+                <div class="clearfix text-right">
+                    Copyright &copy; 2015. Time2Tiffin
+                </div>
+            </div>
+        </footer>
+    </section> -->
+
+    
+<!-- angular model start-->
+<script type="text/ng-template" id="regpopup.html">
+   <div class="confirm-delete-panel">
+       <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+           <h4 class="modal-title">Registration</h4>
+       </div>
+       <div class="modal-body clearfix">
+        <div ng-class="regStatus ? 'alert alert-success':'alert alert-danger'" ng-show="isError">
+            <strong ng-show="regStatus">registration success</strong>
+            <strong ng-show="!regStatus">{{error}}</strong>.
+          </div>
+          <form name="regForm" ng-submit="register(reg)">
+                <div class="clearfix gutter-bottom">
+                  <input type="text" ng-model="reg.firstname" placeholder="First Name" class="form-control input-lg" required>
+                </div>
+                <div class="clearfix gutter-bottom">
+                  <input type="text" ng-model="reg.lastname"  placeholder="Last Name" class="form-control input-lg" required>  
+                </div> 
+                <div class="clearfix gutter-bottom">
+                  <input type="email" ng-model="reg.email" placeholder="Email Here" class="form-control input-lg" required>  
+                </div>
+                <div class="clearfix gutter-bottom">
+                  <input type="text" ng-model="reg.phone" pattern="[0-9]{10}" placeholder="10 digit Mobile Number" class="form-control input-lg" required>  
+                </div> 
+                <div class="clearfix gutter-bottom">
+                  <input type="password" ng-model="reg.password" placeholder="password" class="form-control input-lg" required>  
+                </div> 
+                <div class="clearfix gutter-bottom">
+                  <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button> 
+                </div>    
+              </form>      
+            </div> 
+       </div>
+       <div class="modal-footer">
+           <div class="text-center small">By Signing in, you are agree to the <a href="#" target="_blank">Terms and Conditions</a></div>
+           <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+       </div>
+   </div>
+</script>
+<!-- angular model stop -->
+
+<!-- angular model start-->
+<script type="text/ng-template" id="loginpopup.html">
+   <div class="confirm-delete-panel">
+       <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+           <h4 class="modal-title">Sign In</h4>
+       </div>
+       <div class="modal-body clearfix">
+              <div class="alert alert-danger" ng-show="isError">
+                <strong>{{error}}</strong>.
+              </div>
+              <form name="loginForm" ng-submit="login(creditials)">
+                <div class="clearfix gutter-bottom">
+                  <input type="text" ng-model="creditials.username" placeholder="Email / Mobile Number" class="form-control input-lg" required>  
+                </div>
+                <div class="clearfix gutter-bottom">
+                  <input type="password" ng-model="creditials.password" placeholder="Password" class="form-control input-lg" required>  
+                </div>  
+                <div class="clearfix gutter-bottom">
+                  <button type="submit" class="btn btn-primary btn-block btn-lg">Log In</button>  
+                </div>         
+                <div class="small">
+                  <a href="" class="pull-right" id="forgetPassword" >Forget Password</a>  
+                </div>             
+              </form>   
+       </div>
+       <div class="modal-footer">
+           <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+       </div>
+   </div>
+</script>
+<!-- angular model stop -->
+
+<!-- angular model start-->
+<script type="text/ng-template" id="addresspopup.html">
+        <div class="modal-content">
+        <form ng-submit="save(address)">
+          <div class="modal-header">
+            <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h3 class="modal-title text-center text-uppercase" id="myModalLabel"><i class="fa fa-plus text-muted" aria-hidden="true"></i> Add Address</h3>
+          </div>
+          <div class="modal-body">
+                    <center>
+                      <div ng-show="isError" class="alert alert-danger">
+                        <strong>Error Occured!</strong> 
+                      </div>
+                      <div ng-show="isSuccess" class="alert alert-success">
+                        <strong>{{successMsg}}</strong> 
+                      </div>
+                    </center>
+                    <div class="clearfix gutter-bottom">
+                        <input type="text" ng-model="address.label" placeholder="Set Address Name" class="form-control input-lg" required>
+                    </div>
+                    <div class="clearfix gutter-bottom">
+                        <input type="text" ng-model="address.lane1" placeholder="Address line1" class="form-control input-lg" required>
+                    </div>
+                    <div class="clearfix gutter-bottom">
+                        <input type="text" ng-model="address.lane2" placeholder="Address Line2" class="form-control input-lg" disabled>
+                    </div>
+                    <div class="clearfix gutter-bottom row">
+                        <div class="col-md-4"><input ng-model="address.city" type="text" class="form-control input-lg" placeholder="City" disabled></div>
+                        <div class="col-md-4"><input type="text" ng-model="address.state" class="form-control input-lg" placeholder="State" required></div>
+                        <div class="col-md-4"><input type="text" pattern="[0-9]{6}" ng-model="address.postalCode" class="form-control input-lg" placeholder="Postal Code" required></div>
+                    </div>
+                    <div class="clearfix gutter-bottom">
+                        <input type="text" placeholder="Phone Number" ng-model="address.phone" pattern="[0-9]{10}" class="form-control input-lg">
+                    </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Address</button>
+          </div>
+        </form>
+        </div>
+</script>
+<!-- angular model stop -->
+
+    <script src="Scripts/vendor/jquery.js"></script>
+    <script src="Scripts/vendor/angular.min.js"></script>
+    <script src="Scripts/vendor/angular.ui-router.min.js"></script>
+    <script src="styles/js/bootstrap.min.js"></script>
+    <script src="Scripts/vendor/angular-modal-service.js"></script>
+    <script src="Scripts/vendor/angular-datepicker.js"></script>
+    <script src="Scripts/vendor/angular-local-storage.min.js"></script>
+    <script src="Scripts/vendor/linq.min.js"></script>
+    <script src="Scripts/vendor/ui-bootstrap-tpls-0.13.0.min.js"></script>
+    <script src="Scripts/vendor/underscore.min.js"></script>
+    <script src="Scripts/vendor/modernizr.custom.86080.js"></script>
+    <script src="Scripts/vendor.js"></script>
+    <script src="Scripts/app.js"></script>
+    <script src="Scripts/ttservice.js"></script>
+
+</body>
+
+</html>

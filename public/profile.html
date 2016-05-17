@@ -1,0 +1,68 @@
+<section>
+        <div class="container">
+            <div class="content-panel">
+                <div class="clearfix">
+                    <div class="gutter-bottom clearfix">
+                        <div class="fa-stack fa-3x pull-left text-primary">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+                        </div>
+                        <div class="pull-left">
+                            <h4>{{user.firstname}} &nbsp; {{user.lastname}}</h4>
+                            <p>{{user.email}}</p>
+                            <p>{{user.phone}}</p>
+                        </div>    
+                    </div>   
+                </div>
+                <div class="clearfix">
+                    <div class="col-md-5">
+                        <h5 class="text-uppercase"><i class="fa fa-book" aria-hidden="true"></i> Address Book</h5>
+                        <div class="panel panel-default gutter-vertical" ng-repeat="address in user.address track by $index">
+                          <div class="panel-body">
+                                <p>{{address.label}} <span class="pull-right"><button ng-click="removeAddress($index)">Delete</button></span></p>
+                                <p>
+                                {{address.lane1}}, 
+                                {{address.lane2 || ""}},{{address.city}}, {{address.state}}. {{address.pincode}} 
+                                </p>      
+                                <p>{{address.phone}}</p>
+                                <span class="label label-default">{{address.label}}</span>
+                          </div>
+                        </div>
+                        <div class="clearfix text-right" style="border-top: 1px solid #efefef; padding: 10px 0;">
+                                <a href class="btn btn-default btn-small" ng-click="openAddress()">Add Address  <i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pull-right">
+                        <h5 class="text-uppercase"><i class="fa fa-book" aria-hidden="true"></i> Order History</h5>
+                        <table class="rwd-table">
+                          <tbody>
+                              <tr>
+                                <th>Date</th>
+                                <th>Order Number</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                              </tr>
+                              <tr ng-repeat="booking in bookings">
+                                <td data-th="Date">{{booking.createdAt}}</td>
+                                <td data-th="Order Number">{{booking.order_num}}</td>
+                                <td data-th="Amount">{{booking.finalPrice}}</td>
+                                <td data-th="Status"><span class="label label-success">{{booking.status}}</span></td>
+                              </tr>
+                              <!-- <tr>
+                                <td data-th="Date">01/05/2015</td>
+                                <td data-th="Order Number">29321313644489</td>
+                                <td data-th="Amount">220</td>
+                                <td data-th="Status"><span class="label label-danger">Failed</span></td>
+                              </tr> -->
+                              
+                        </table>
+                        <div class="panel gutter-vertical">
+                          <div class="panel-body text-center">
+                              <!-- <p>No Orders Available</p> -->
+                              <a ui-sref="home" type="button" class="btn btn-primary">Continue Shopping</a>
+                          </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+    </section>

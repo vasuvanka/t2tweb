@@ -1,0 +1,75 @@
+﻿<section>
+    <div class="container">
+        <div class="content-panel">
+            <div class="alert alert-info text-center text-uppercase" role="alert">
+                Thank you for placing your order with us!
+            </div>
+            <div class="clearfix">
+                <p>
+                    Your order {{order.order_num}} is being processed.
+                    Please find below the summary of your order
+                </p>
+                <p>
+                    For any query or support, we can be reached at Contact Number: +91-11-4014-8000
+                    Email: hello@time2tiffin.com
+                </p>
+            </div>
+            <div class="clearfix row">
+                <div class="col-md-6">
+                    <h4>Order Summary</h4>
+                    <p>
+                        Order Number:<strong>{{order.order_num}}</strong> <br>
+                        Order date: <strong>{{od_date}}</strong><br>
+                        Delivery date:<strong>{{dl_date}}</strong> <br>
+                        Delivery Time Slot: <strong>{{order.slot.startHrs+':'+order.slot.startMins+'-'+order.slot.stopHrs+':'+order.slot.stopMins}}</strong><br>
+                        Payment Method: {{order.txn_type.toUpperCase()}}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h4>Shipping Address</h4>
+                    <p>
+                        Name: {{user.name}}<br>
+                        Email: {{user.email}}<br>
+                        Address: {{order.address.lane1}},{{order.address.lane2}}<br>
+                        City: {{order.address.city}}<br>
+                        Pin Code: {{order.address.postalCode}}
+                    </p>
+                </div>
+            </div>
+            <div class="clearfix">
+                <table class="rwd-table">
+                    <tbody>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Sub Total</th>
+                        </tr>
+                        <tr ng-repeat="item in items">
+                            <td data-th="Product">{{item.name}}</td>
+                            <td data-th="Price">{{item.cost}}</td>
+                            <td data-th="Quantity">{{item.qty}}</td>
+                            <td data-th="Sub Total">{{item.qty*item.cost}}</td>
+                        </tr>
+                        <!-- <tr>
+                            <td data-th="Product">Dosa</td>
+                            <td data-th="Price">35</td>
+                            <td data-th="Quantity">1</td>
+                            <td data-th="Sub Total">35</td>
+                        </tr> -->
+                        <!-- <tr>
+                            <td colspan="3" class="text-right"><label>Delivery</label></td>
+                            <td data-th="Delivery">15</td>
+                        </tr> -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-right"><label>Grand Total</label></td>
+                            <td data-th="Total">{{order.finalPrice}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

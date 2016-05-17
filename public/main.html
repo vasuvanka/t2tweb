@@ -1,0 +1,16 @@
+﻿<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 form-center">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <select class="btn btn-primary btn-lg dropdown-toggle" ng-model="city" ng-change="getLoc(city)" ng-options="cit for cit in cities">
+                            <option value="">Select City</option>
+                        </select>
+                    </div><!-- /btn-group -->
+                    <input type="text" class="form-control input-lg" aria-label="..." placeholder="Enter your area" ng-model="location" typeahead-min-length="1" typeahead="loc.location for loc in locs | filter:$viewValue" typeahead-on-select="onSelect($item, $model, $label)">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
