@@ -89,7 +89,8 @@ angular.module('t2tApp')
             msg:msg || "",
             deliveryDate:deliveryDate,
             deliverySlot:slot,
-            txn_type:txn_type
+            txn_type:txn_type,
+            txn_from:"w"
         };
         user.postOrder(id,token,obj,callback);
     }

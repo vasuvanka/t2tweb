@@ -3,7 +3,7 @@
 
 var app;
 
-app = angular.module('t2tApp', ['ui.router', 'ui.bootstrap', 'LocalStorageModule','720kb.datepicker']);
+app = angular.module('t2tApp', ['ui.router', 'ui.bootstrap', 'LocalStorageModule']);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'localStorageServiceProvider', function ($stateProvider, $urlRouterProvider, $locationProvider, localStorageServiceProvider) {
     $urlRouterProvider.otherwise('/home');
@@ -36,13 +36,16 @@ app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope'
         $state.go("home");
     });
     var od_date = new Date(order.createdAt);
-    $scope.od_date = od_date.getDate()+'-'+od_date.getMonth()+'-'+od_date.getFullYear();
+    $scope.od_date = od_date.getDate()+'-'+(od_date.getMonth()+1)+'-'+od_date.getFullYear();
     var dl_date = new Date(order.deliveryDate);
-    $scope.dl_date = dl_date.getDate()+'-'+dl_date.getMonth()+'-'+dl_date.getFullYear();
-    $scope.items = JSON.parse(order.items[0]);
+    $scope.dl_date = dl_date.getDate()+'-'+(dl_date.getMonth()+1)+'-'+dl_date.getFullYear();
+    console.log(order);
+    $scope.items = order.items;
 }]);
-app.controller('profileCtrl', ['$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function ($rootScope,authService,$scope, ttService, $state, storageService) {
+app.controller('profileCtrl', ['$modal','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
+    $scope.couponMsg = "";
+    $scope.isCouponError = false;
     if (node) {
         $scope.username = authService.name;
         $scope.user = node;
@@ -61,7 +64,6 @@ app.controller('profileCtrl', ['$rootScope','authService','$scope', 'ttService',
         }else{
             $scope.addresses = [];
         }
-        console.log($scope.addresses);
         $scope.$apply();
     });
     $scope.removeAddress = function(i){
@@ -115,16 +117,32 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
         $scope.$apply();
     });
     $scope.addresses = authService.address;
+    $scope.isValidCoupon = false;
+    var openErrorDialog = function () {
+        var modalInstance = $modal.open({
+         templateUrl: 'errorpopup.html',
+         controller: 'errorModalCtrl',
+         size:"sm",
+         resolve: {
+             entity: function () {
+                 return $scope.entity;
+             }
+         }
+        });
+        modalInstance.result.then(function (selectedItem) {             
+
+        });
+    }
     $scope.minDate = new Date().getFullYear()+"-"+new Date().getMonth()+"-"+new Date().getDate();
     $scope.getSlots = function(){
-        var day = new Date($scope.order.deliveryDate).getDay();
+        var date = new Date($scope.order.deliveryDate).getDate();
         var month = new Date($scope.order.deliveryDate).getMonth();
         var year = new Date($scope.order.deliveryDate).getFullYear();
         var d = new Date();
         if (year == d.getFullYear()) {
             if (month >= d.getMonth()) {
-                if (day>= d.getDay()) {
-                    if (day == d.getDay()) {
+                if (date>= d.getDate()) {
+                    if (date == d.getDate()) {
                             ttService.slots(function(data){
                                 if (data.status == "success") {
                                     $scope.slots = data.data;
@@ -144,13 +162,16 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
                         })
                     }
                 }else{
-                    alert("invalid date selection")
+                    openErrorDialog();
+                    // alert("invalid date selection")
                 }
             }else{
-                alert("invalid month selection")
+                openErrorDialog();
+                // alert("invalid month selection")
             }
         }else{
-            alert("invalid year selection")
+            openErrorDialog();
+            // alert("invalid year selection")
         }
     }
     var totalCost = cartService.totalCost();
@@ -195,12 +216,21 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
     };
     $scope.updatePaymentType = function(ptype){
         $scope.$digest();
-    }
+    } 
+    $scope.couponEntered = false;
     $scope.validateCoupon = function(coupon){
         if(coupon.toString().length >= 6){
             if (authService.status) {
-               ttService.verifyCoupon(authService.id,authService.token,function(obj){
-                debugger;
+               ttService.verifyCoupon(authService.id,authService.token,coupon,function(obj){
+                $scope.couponEntered = true;
+                if (obj.status == "error") {
+                        $scope.isValidCoupon = false; 
+                        $scope.couponMsg = "Invalid Coupon";
+                    }else{
+                        $scope.isValidCoupon = true;
+                        $scope.couponMsg = "Coupon Applied"; 
+                    }
+                $scope.$apply();
                })
             }else{
                 showloginpopup();
@@ -221,7 +251,7 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
                 delete obj.$$hashKey;
                 return obj;
             });
-            ttService.postOrder(authService.id,authService.token,JSON.stringify(cList),order.address,$scope.coupon,$scope.couponValue,$scope.totalCost,$scope.totalCost,order.deliveryDate,order.slot,"test",order.paymentMode,function(obj){
+            ttService.postOrder(authService.id,authService.token,JSON.stringify(cList),order.address,$scope.coupon,$scope.couponValue,$scope.totalCost,$scope.totalCost,order.deliveryDate,order.slot,order.msg,order.paymentMode,function(obj){
                 if (obj.status == "success") {
                     storageService.set("order_summary",obj.data);
                     $state.go("confirm");
@@ -274,15 +304,20 @@ app.controller('menuCtrl', ['$rootScope','cartService','authService','$scope', '
     });
     }
     $scope.getMenu = function(cat){
-        ttService.getMenu(authService.location._id,cat,function(data){
-            if (data.status == "success") {
-                $scope.menuList = data.data;
-                storageService.set('menuList', data.data);
-            } else {
-                alert("oops something went wrong!! refresh the page");
-            }
-            $scope.$apply();
-        });
+        authService.location = loc;
+        if (authService.location != undefined || authService.location != "") {
+            ttService.getMenu(authService.location._id,cat,function(data){
+                if (data.status == "success") {
+                    $scope.menuList = data.data;
+                    storageService.set('menuList', data.data);
+                } else {
+                    alert("oops something went wrong!! refresh the page");
+                }
+                $scope.$apply();
+            });
+        }else{
+            $state.go("home");
+        }
     }
     $scope.countFunc=function(isIncr,item){
         if (isIncr) {
@@ -403,106 +438,17 @@ app.controller('baseController', [ '$rootScope','cartService' ,'$modal','storage
 
 }]);
 
-app.controller('regModalCtrl', ['$rootScope','ttService','$scope', '$modalInstance', 'entity', function ($rootScope,ttService,$scope, $modalInstance, entity) {
-    $scope.entity = entity;
-    $scope.isError = false;
-    $scope.register = function(data){
-        ttService.register(data,function(obj){
-        $scope.regStatus = obj.status == 'success';
-        if (!$scope.regStatus) {
-                $scope.isError = true;
-                $scope.error = obj.error[0];
-            }
-            $scope.reg={};
-            $scope.$apply();
-      });
-    }
-     $scope.ok = function () {
-         $modalInstance.close($scope.entity);
-     };
 
-     $scope.cancel = function () {
-         $modalInstance.dismiss('cancel');
-     };    
- }]);
-
-app.controller('loginModalCtrl', ['$rootScope','ttService','storageService','authService','$scope', '$modalInstance', 'entity', function ($rootScope,ttService,storageService,authService,$scope, $modalInstance, entity) {
-     $scope.entity = entity;
-     $scope.login = function (creditials){
-      ttService.login(creditials.username,creditials.password,function(obj){
-        authService.status = obj.status == 'success';
-        $scope.isError = false;
-        if (authService.status) {
-            $scope.isError = false;
-            $scope.error = null;
-            storageService.set("userNode",obj.data);
-            authService.id = obj.data.id;
-            authService.name = obj.data.firstname+" "+obj.data.lastname;
-            authService.token = obj.data.token;
-            authService.address = obj.address;
-            $scope.creditials = {};
-            $rootScope.$broadcast("userLoginName",{});
-            $rootScope.$broadcast("addressChange",{});
-            $modalInstance.dismiss('cancel');
-        }else{
-            $scope.isError = true;
-            $scope.creditials.password = '';
-            $scope.error = "invalid creditials";
-        }
-        $scope.$apply();
-      });
-    }
-     $scope.ok = function () {
-         $modalInstance.close($scope.entity);
-     };
-
-     $scope.cancel = function () {
-         $modalInstance.dismiss('cancel');
-     };    
- }]);
-app.controller('addressModalCtrl', ['$state','$rootScope','ttService','storageService','authService','$scope', '$modalInstance', 'entity', function ($state,$rootScope,ttService,storageService,authService,$scope, $modalInstance, entity) {
-     $scope.entity = entity;
-     $scope.isError = false ;
-     $scope.isSuccess = false;
-     $scope.address = {};
-     var loc = storageService.get("loc");
-     var city = storageService.get("city");
-     var node = storageService.get("userNode");
-     $scope.address.phone = node.phone;
-     $scope.address.lane2 = loc.location || "";
-     $scope.address.city = city || "";
-     $scope.save = function (address){
-        node.address.push(address);
-        ttService.updateProfile(authService.id,authService.token,{address:node.address},function(obj){
-            if (obj.status == "error") {
-                $scope.isSuccess = false;
-                $scope.isError = true;
-                setTimeout(function(){
-                    $modalInstance.dismiss('cancel');
-                    $state.go("home");
-                },1500);
-            }else{
-                $scope.isSuccess = true;
-                $scope.successMsg = "Address Added ..!";
-                node.address = obj.data.address;
-                storageService.set("userNode",node);
-                $rootScope.$broadcast("addressChange",{});
-            }
-        });
-     }
-     $scope.cancel = function () {
-         $modalInstance.dismiss('cancel');
-     };    
- }]);
 app.factory('authService',['storageService', function (storageService) {
     var obj = storageService.get("userNode");
-    var auth = { name: '', status: false ,'id':0,'token':'','address':[],'city':''};
+    var auth = { name: '', status: false ,'id':0,'token':'','address':[],'city':'',location:''};
     if (obj) {
         auth.name = obj.firstname +" "+obj.lastname;
         auth.status = true;
         auth.id = obj.id;
         auth.address = obj.address || [];
         auth.token = obj.token;
+        auth.location = storageService.get("loc") || "";
     }
     return auth;
 }]);

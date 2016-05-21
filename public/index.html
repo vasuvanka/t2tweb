@@ -46,7 +46,7 @@
         <li><span>Image 04</span><div><h3></h3></div></li>
     </ul> -->
     <section class="" id="header-section">
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -57,7 +57,7 @@
                     </button>
                     <a class="navbar-brand" href="#">
                         <!-- <img src="images/time2tiffin-logo.png" alt="time2tiffin.in"> -->
-                        <img src="images/time2tiffin-logo-round.png" alt="time2tiffin.in">
+                        <img src="images/time2tiffin-logo-round.png" height="150" width="150" alt="time2tiffin.in">
 
                     </a>
                 </div>
@@ -87,44 +87,8 @@
     </section>
 
      <div ui-view=""></div>
-   <!-- <section class="white-bg footer">
-        <footer class="container">
-            <div class="col-md-5 border-right">
-                <p class="text-primary">Let us show you how we can help</p>
-                <div class="gutter-bottom">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for...">
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button">Subscribe</button>
-                        </span>
-                    </div> --><!-- /input-group -->
-                <!-- </div>
-                <div class="clearfix gutter-bottom">
-                    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-                    <a href="#"><img src="images/twitter.png" alt="Twitter"></a>
-                    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
-                    <a href="#"><img src="images/pinterest.png" alt="Pinterest"></a>
-                </div>
-            </div>
-            <div class="col-md-7">
-                <div class="clearfix">
-                    <div class="pull-left gutter-bottom">
-                        <img src="images/cards.jpg" alt="Cards" class="img-responsive">
-                    </div>
-                    <div class="pull-right gutter-bottom">
-                        <img src="images/google-play-badge.png" alt="Google Play">
-                        <img src="images/app-store-badge.png" alt="Appile Play Store">
-                    </div>
-                </div>
-                <div class="clearfix gutter-bottom">
-                    <a href="#">Jobs</a> | <a href="#">Cancellation, return and refund policy </a> | <a href="#">Terms and conditions</a> | <a href="#">FAQ and Help Center</a>
-                </div>
-                <div class="clearfix text-right">
-                    Copyright &copy; 2015. Time2Tiffin
-                </div>
-            </div>
-        </footer>
-    </section> -->
+
+   
 
     
 <!-- angular model start-->
@@ -189,9 +153,12 @@
                 </div>  
                 <div class="clearfix gutter-bottom">
                   <button type="submit" class="btn btn-primary btn-block btn-lg">Log In</button>  
+                </div>
+                <div class="small">
+                  <a href="" class="pull-left" id="forgetPassword" ng-click="openSignUp()">SignUp</a>  
                 </div>         
                 <div class="small">
-                  <a href="" class="pull-right" id="forgetPassword" >Forget Password</a>  
+                  <a href="" class="pull-right" id="forgetPassword" ng-click="openForget()">Forget Password</a>  
                 </div>             
               </form>   
        </div>
@@ -202,6 +169,33 @@
 </script>
 <!-- angular model stop -->
 
+
+<!-- angular model start-->
+<script type="text/ng-template" id="forgetpopup.html">
+   <div class="confirm-delete-panel">
+       <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+           <h4 class="modal-title">Forget Password</h4>
+       </div>
+       <div class="modal-body clearfix">
+              <div  ng-class="{ 'alert alert-danger': error, 'alert alert-success': success }" ng-show="isError">
+                <strong>{{error || success}}</strong>.
+              </div>
+              <form name="loginForm" ng-submit="retrive(email)">
+                <div class="clearfix gutter-bottom">
+                  <input type="email" ng-model="email" placeholder="Email Here" class="form-control input-lg" required>  
+                </div> 
+                <div class="clearfix gutter-bottom">
+                  <button type="submit" class="btn btn-primary btn-block btn-lg">Retrive</button>  
+                </div>             
+              </form>   
+       </div>
+       <div class="modal-footer">
+           <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+       </div>
+   </div>
+</script>
+<!-- angular model stop -->
 <!-- angular model start-->
 <script type="text/ng-template" id="addresspopup.html">
         <div class="modal-content">
@@ -245,7 +239,24 @@
         </div>
 </script>
 <!-- angular model stop -->
-
+<!-- angular model start-->
+<script type="text/ng-template" id="errorpopup.html">
+   <div class="confirm-delete-panel">
+       <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+           <h4 class="modal-title">Invalid Date Selection</h4>
+       </div>
+       <div class="modal-body clearfix">
+              <div  class="alert alert-danger">
+                <strong>Invalid Date Selection</strong>.
+              </div>   
+       </div>
+       <div class="modal-footer">
+           <button class="btn btn-danger" ng-click="cancel()">Ok</button>
+       </div>
+   </div>
+</script>
+<!-- angular model stop -->
     <script src="Scripts/vendor/jquery.js"></script>
     <script src="Scripts/vendor/angular.min.js"></script>
     <script src="Scripts/vendor/angular.ui-router.min.js"></script>
@@ -259,6 +270,7 @@
     <script src="Scripts/vendor/modernizr.custom.86080.js"></script>
     <script src="Scripts/vendor.js"></script>
     <script src="Scripts/app.js"></script>
+    <script src="Scripts/controllers/indexCtrl.js"></script>
     <script src="Scripts/ttservice.js"></script>
 
 </body>
