@@ -21,7 +21,7 @@
                                 <td data-th="Quantity">{{item.qty * item.cost}}</td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="text-right"><label>Delivery</label></td>
+                                <td colspan="3" class="text-right"><label>Delivery Fee </label></td>
                                 <td data-th="Delivery">Rs.{{deliveryFee}}</td>
                             </tr>
                         </tbody>
@@ -49,17 +49,17 @@
                         </div>
 
                         <!-- <div class="col-md-6">
-                            <datepicker date-format="MM/dd/yyyy">
-                            <input  type="text" ng-model="order.deliveryDate">
+                            <datepicker class="first" date-format="MM/dd/yyyy" date-min-limit="{{minLimit}}" date-max-limit="{{maxLimit}}">
+                                <input  type="text" ng-model="date">
                             </datepicker>
                         </div> -->
                     </div>
                     <div class="row gutter-bottom">
                         <div class="col-md-6">Choose delivery time slot</div>
                         <div class="col-md-6">
-                            <select ng-model="order.slot" class="form-control" required>
+                            <select ng-model="order.slot" class="form-control" ng-change="validateImmediate(order.slot)" required>
                             <option value="">Select Delivery Slot</option>
-                                <option ng-repeat="slot in slots" value="{{slot}}">{{( (slot.startHrs < 10 )? '0'+slot.startHrs : slot.startHrs ) +" : "+ ( (slot.startMins < 10 )? '0' + slot.startMins : slot.startMins ) +" AM - "+ ( (slot.stopHrs < 10 )? '0'+slot.stopHrs : slot.stopHrs  )+" : "+( (slot.stopMins < 10) ? '0'+slot.stopMins : slot.stopMins )+" AM"}}</option>
+                                <option ng-repeat="slot in slots" value="{{slot.value}}">{{slot.text}}</option>
                             </select>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                     <div class="row gutter-bottom">
                         <div class="col-md-6">Comments</div>
                         <div class="col-md-6">
-                            <textarea ng-model="order.msg" placeholder="Little Spicy" class="form-control"></textarea>
+                            <textarea ng-model="order.msg" placeholder="Extra chutney" class="form-control"></textarea>
                         </div>
                         
 

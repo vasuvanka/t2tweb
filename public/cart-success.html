@@ -21,9 +21,9 @@
                     <h4>Order Summary</h4>
                     <p>
                         Order Number:<strong>{{order.order_num}}</strong> <br>
-                        Order date: <strong>{{order.createdAt}}</strong><br>
-                        Delivery date:<strong>{{order.deliveryDate}}</strong> <br>
-                        Delivery Time Slot: <strong>{{order.slot.startHrs+':'+order.slot.startMins+'-'+order.slot.stopHrs+':'+order.slot.stopMins}}</strong><br>
+                        Order date: <strong>{{od_date}}</strong><br>
+                        Delivery date:<strong>{{dl_date}}</strong> <br>
+                        Delivery Time Slot: <strong>{{slot}}</strong><br>
                         Payment Method: {{order.txn_type.toUpperCase()}}<br>
                         Comment : {{order.msg}}
 

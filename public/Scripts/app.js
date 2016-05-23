@@ -3,7 +3,7 @@
 
 var app;
 
-app = angular.module('t2tApp', ['ui.router', 'ui.bootstrap', 'LocalStorageModule']);
+app = angular.module('t2tApp', ['ui.router', 'ui.bootstrap', 'LocalStorageModule','720kb.datepicker']);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'localStorageServiceProvider', function ($stateProvider, $urlRouterProvider, $locationProvider, localStorageServiceProvider) {
     $urlRouterProvider.otherwise('/home');
@@ -27,6 +27,13 @@ app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope'
     if (node && order) {
         $scope.order = order;
         $scope.user = node;
+        if (order.slot.startHrs == 99) {
+            $scope.slot = "Immediate";
+            $scope.deliveryFee = 20 ;
+        }else{
+            $scope.deliveryFee = 0;
+            $scope.slot = order.slot.startHrs+':'+order.slot.startMins+' AM - '+order.slot.stopHrs+':'+order.slot.stopMins+" AM";
+        }
     }else{
         $state.go("home");
     }
@@ -100,6 +107,7 @@ app.controller('profileCtrl', ['$modal','$rootScope','authService','$scope', 'tt
 }]);
 app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,$rootScope,cartService,authService,$scope, ttService, $state, storageService) {
     $scope.slots = [];
+    var slots = [];
     $scope.order = {};
     $rootScope.$broadcast("addressChange",{});
     $scope.order.paymentMode = 'cod';
@@ -143,9 +151,26 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
             if (month >= d.getMonth()) {
                 if (date>= d.getDate()) {
                     if (date == d.getDate()) {
+                        var slotList = [{text:"Immediate",value:{
+                                startHrs:99,
+                                startMins:99,
+                                duration:0,
+                                stopMins:99,
+                                stopHrs:99
+                            }}];
                             ttService.slots(function(data){
                                 if (data.status == "success") {
-                                    $scope.slots = data.data;
+                                 slots = data.data;
+                                    data.data.forEach(function(slot){
+                                        slots.push(slot);
+                                        var s_hrs = slot.startHrs < 10 ? '0'+slot.startHrs : slot.startHrs;
+                                        var s_mins = slot.startMins < 10 ? '0' + slot.startMins : slot.startMins ;
+                                        var e_hrs = slot.stopHrs < 10 ? '0'+slot.stopHrs : slot.stopHrs;
+                                        var e_mins = slot.stopMins < 10 ? '0'+slot.stopMins : slot.stopMins;
+                                        var slotText = s_hrs+" : "+s_mins +" AM - "+e_hrs+" : "+e_mins+" AM";
+                                        slotList.push({text:slotText,value:slot});
+                                    });
+                                    $scope.slots = slotList;
                                     $scope.$digest();
                                 }else{
                                     alert("Oops something went wrong...!")
@@ -154,7 +179,17 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
                     }else{
                         ttService.allSlots(function(data){
                             if (data.status == "success") {
-                                $scope.slots = data.data;
+                                var slotList = [];
+                                slots = data.data;
+                                data.data.forEach(function(slot){
+                                    var s_hrs = slot.startHrs < 10 ? '0'+slot.startHrs : slot.startHrs;
+                                    var s_mins = slot.startMins < 10 ? '0' + slot.startMins : slot.startMins ;
+                                    var e_hrs = slot.stopHrs < 10 ? '0'+slot.stopHrs : slot.stopHrs;
+                                    var e_mins = slot.stopMins < 10 ? '0'+slot.stopMins : slot.stopMins;
+                                    var slotText = s_hrs+" : "+s_mins +" AM - "+e_hrs+" : "+e_mins+" AM";
+                                    slotList.push({text:slotText,value:slot});
+                                });
+                                $scope.slots = slotList;
                                 $scope.$digest();
                             }else{
                                 alert("Oops something went wrong...!")
@@ -242,6 +277,21 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
     }    
     $scope.coupon ;
     $scope.couponValue = 0;
+    var dfee = false;
+    $scope.validateImmediate = function(slot){
+        slot = JSON.parse(slot);
+        if (slot.startHrs == 99) {
+                dfee = true;
+                $scope.deliveryFee = 20;
+                $scope.totalCost =$scope.totalCost+$scope.deliveryFee;
+            }else{
+                if (dfee) {
+                    dfee = false;
+                    $scope.totalCost =$scope.totalCost-$scope.deliveryFee;
+                }
+                $scope.deliveryFee = 0;
+            }
+    }
     $scope.placeOrder = function(order){
         if (authService.status) {
             console.log(JSON.stringify($scope.cartList));
@@ -251,6 +301,7 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
                 delete obj.$$hashKey;
                 return obj;
             });
+            
             ttService.postOrder(authService.id,authService.token,JSON.stringify(cList),order.address,$scope.coupon,$scope.couponValue,$scope.totalCost,$scope.totalCost,order.deliveryDate,order.slot,order.msg,order.paymentMode,function(obj){
                 if (obj.status == "success") {
                     storageService.set("order_summary",obj.data);
