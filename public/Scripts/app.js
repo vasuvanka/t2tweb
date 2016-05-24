@@ -151,16 +151,17 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
             if (month >= d.getMonth()) {
                 if (date>= d.getDate()) {
                     if (date == d.getDate()) {
-                        var slotList = [{text:"Immediate",value:{
-                                startHrs:99,
-                                startMins:99,
-                                duration:0,
-                                stopMins:99,
-                                stopHrs:99
-                            }}];
                             ttService.slots(function(data){
                                 if (data.status == "success") {
-                                 slots = data.data;
+                                    if (data.data.length > 0) {
+                                        var slotList = [{text:"Immediate",value:{
+                                        startHrs:99,
+                                        startMins:99,
+                                        duration:0,
+                                        stopMins:99,
+                                        stopHrs:99
+                                    }}];
+                                    slots = data.data;
                                     data.data.forEach(function(slot){
                                         slots.push(slot);
                                         var s_hrs = slot.startHrs < 10 ? '0'+slot.startHrs : slot.startHrs;
@@ -171,6 +172,9 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
                                         slotList.push({text:slotText,value:slot});
                                     });
                                     $scope.slots = slotList;
+                                    }else{
+                                        $scope.slots = [];
+                                    }
                                     $scope.$digest();
                                 }else{
                                     alert("Oops something went wrong...!")
