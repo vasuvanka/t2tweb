@@ -1,0 +1,24 @@
+<section>
+    <div class="container">
+
+		<form id="postForm"  name="postForm" action="http://localhost:3001/testtxn" method="POST">
+			<input type="hidden" name="phone" value="{{user.phone}}">
+			<input type="hidden" name="order_num" value="{{order.order_num}}">
+			<input type="hidden" name="total" value="{{order.finalPrice}}">
+
+			<br><br><br><br><br>
+        	<div class="row">
+            <div class="col-lg-12 form-center">
+			<div class="alert alert-info text-center text-uppercase" role="alert">
+           		Hang on we are processing ...
+        	</div>
+        	</div>
+        	</div>
+		</form>
+	</div>
+	<script type="text/javascript">
+	setTimeout(function(){
+		document.postForm.submit();
+	},500);
+	</script>
+</section>

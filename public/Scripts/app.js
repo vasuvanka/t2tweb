@@ -12,13 +12,24 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'localS
     .state('menu', { url: '/menu', templateUrl: '/menu.html', controller: 'menuCtrl' })
     .state('cart', { url: '/cart', templateUrl: '/cart.html',controller: 'cartCtrl' })
     .state('confirm', { url: '/confirm', templateUrl: '/cart-success.html',controller: 'confirmCtrl' ,isLoginRequired:true })
-    .state('profile', { url: '/profile', templateUrl: '/profile.html',controller: 'profileCtrl',isLoginRequired:true });
-
+    .state('profile', { url: '/profile', templateUrl: '/profile.html',controller: 'profileCtrl',isLoginRequired:true })
+    .state('txn_post', { url: '/txn_post', templateUrl: '/post-trans.html',controller: 'txnCtrl',isLoginRequired:true });
 
     localStorageServiceProvider
     .setStorageType('sessionStorage');
 }]);
 
+
+app.controller('txnCtrl', ['cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
+    var node = storageService.get("userNode");
+    var order = storageService.get("order_summary");
+    if (node && order) {
+        $scope.order = order;
+        $scope.user = node;
+    }else{
+        $state.go("home");
+    }
+}]);
 app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
     cartService.clearAll();
@@ -108,9 +119,17 @@ app.controller('profileCtrl', ['$modal','$rootScope','authService','$scope', 'tt
 app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,$rootScope,cartService,authService,$scope, ttService, $state, storageService) {
     $scope.slots = [];
     var slots = [];
-    $scope.order = {};
+    $scope.order = {
+        'paymentMode':'cod'
+    };
+    $scope.color = {
+        name: 'blue'
+      };
+    $scope.setPaymentMode = function(mode){
+        alert(mode);
+    }
     $rootScope.$broadcast("addressChange",{});
-    $scope.order.paymentMode = 'cod';
+    $scope.paymentModeList = ['cod','paytm'];
     $rootScope.$broadcast("userLoginName",{});
     var node = storageService.get("userNode");
     $scope.cartList = cartService.getCart();
@@ -320,7 +339,11 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
             ttService.postOrder(authService.id,authService.token,JSON.stringify(cList),order.address,$scope.coupon,$scope.couponValue,$scope.totalCost,$scope.totalCost,order.deliveryDate,order.slot,order.msg,order.paymentMode,function(obj){
                 if (obj.status == "success") {
                     storageService.set("order_summary",obj.data);
-                    $state.go("confirm");
+                    if (obj.data.txn_type == "cod") {
+                        $state.go("confirm");
+                    }else{
+                        $state.go("txn_post");
+                    }
                 }else{
                     alert("oops something went wrong..!")
                 }

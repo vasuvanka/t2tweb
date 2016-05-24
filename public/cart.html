@@ -97,21 +97,18 @@
                     <div class="clearfix text-right" style="border-top: 1px solid #efefef; padding: 10px 0;">
                             <a href class="btn btn-default btn-small" ng-show="username" ng-click="openAddress()">Add Address  <i class="fa fa-plus-circle" aria-hidden="true"></i></a>
                     </div>
+                    <div class="row gutter-bottom">
+                        <div class="col-md-12">Select Mode of Payment</div>
+                    </div>
                     <div class="content-panel2">
                         <div class="btn-group gutter-bottom" data-toggle="buttons">
-                            <label class="btn btn-md btn-default">
-                              <input type="radio" id="option1" ng-model="order.paymentMode" name="paymentMode" value="cod" required> COD
-                            </label>
-                            <label class="btn btn-md btn-default">
-                              <input type="radio" id="option2" ng-model="order.paymentMode" value="paytm" name="paymentMode" required> Paytm
+                            <label  ng-repeat="mode in paymentModeList">
+                              <input  type="radio" ng-model="order.paymentMode" value="{{mode}}"> {{mode.toUpperCase()}}
                             </label>
                         </div>
-                        <div class="clearfix" style="height: 50px;">
-                            <div class="clearfix" id="select-state1" style="display: none;">
-                                * Cash on Delivery selected, click on Place Order to continue. 
-                            </div>
-                            <div class="clearfix" id="select-state2" style="display: none;">
-                                * Order with Paytm selected, click on Place Order to continue. 
+                        <div class="row text-center" style="height: 50px;">
+                            <div>
+                                * Order with <strong> {{ order.paymentMode.toUpperCase()}} </strong> selected, click on Place Order to continue. 
                             </div>
                         </div>   
                       <div class="row text-center">
@@ -124,17 +121,3 @@
         </div>
     </div>
 </section>
-                    
-<script>
-        $('.btn-group .btn').on('click',function(){
-          //console.log($(this).text());
-            $('#select-state1').hide();
-            $('#select-state2').hide();
-            if($(this).children().attr('id') === 'option1'){
-                $('#select-state1').show();
-            }else 
-                if($(this).children().attr('id') === 'option2'){
-                $('#select-state2').show();
-            }
-        }); 
-</script>
