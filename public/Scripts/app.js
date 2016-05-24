@@ -209,9 +209,11 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
             // alert("invalid year selection")
         }
     }
+    var dfeeApplied = false;
     var totalCost = cartService.totalCost();
     $scope.deliveryFee = 0;
     if (totalCost < 50) {
+        dfeeApplied = true;
        $scope.deliveryFee = 15; 
     }
     if (totalCost == 0) {
@@ -282,14 +284,23 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
         slot = JSON.parse(slot);
         if (slot.startHrs == 99) {
                 dfee = true;
-                $scope.deliveryFee = 20;
-                $scope.totalCost =$scope.totalCost+$scope.deliveryFee;
+                if (dfeeApplied) {
+                    $scope.deliveryFee = $scope.deliveryFee + 20;
+                    $scope.totalCost =$scope.totalCost+20;
+                }else{
+                    $scope.deliveryFee = 20;
+                    $scope.totalCost =$scope.totalCost+20;
+                }
             }else{
                 if (dfee) {
                     dfee = false;
-                    $scope.totalCost =$scope.totalCost-$scope.deliveryFee;
+                    $scope.totalCost =$scope.totalCost-20;
+                    if (dfeeApplied) {
+                        $scope.deliveryFee = 15;
+                    }else{
+                        $scope.deliveryFee = 0;
+                    }
                 }
-                $scope.deliveryFee = 0;
             }
     }
     $scope.placeOrder = function(order){
