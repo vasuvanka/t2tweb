@@ -47,7 +47,7 @@
                                 <td data-th="Date">{{booking.createdAt}}</td>
                                 <td data-th="Order Number">{{booking.order_num}}</td>
                                 <td data-th="Amount">{{booking.finalPrice}}</td>
-                                <td data-th="Status"><span class="label label-success">{{booking.status}}</span></td>
+                                <td data-th="Status"><span ng-class="{'label label-success':booking.status == 'success' ,'label label-danger':booking.status == 'cancelled' ,'label label-warning':booking.status == 'pending'  }">{{booking.status}}</span></td>
                                 <td data-th="repeat"><a href="" class="success" ng-click="reorder(booking)">Repeat</a></td>
                               </tr>
                               <!-- <tr>
