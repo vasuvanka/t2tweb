@@ -1,0 +1,87 @@
+  <section>
+        <div class="container">
+            <div class="content-panel">
+                <div class="col-md-10 center-block" style="float: none;">
+                    <div class="alert alert-info text-center text-uppercase" role="alert">
+                      <h4 style="margin-bottom: 0;">Tracking</h4>
+                    </div>
+                    <div class="clearfix row"> 
+                                           
+                        <div class="col-md-4">                        
+                        </div>
+                        <div class="col-md-3 row"> 
+                            <input type="text" class="form-control input-lg" aria-label="..." placeholder="Enter Order Number" ng-model="trackId">
+                        </div>
+                        <div class="col-md-2 row">
+                            <button ng-click="getTrackingData(trackId)" class="btn btn-lg btn-primary">Track</button>
+                        </div>
+                        <div>
+                            
+                        </div>                       
+                        </div>
+                        <div class="col-md-2">                        
+                        </div>
+                         
+                            <!-- <div class="col-md-6 center-block" style="float: none">
+                                <div class="clearfix gutter-bottom">
+                                    <div class="row clearfix">
+                                        <div class="col-md-6 col-xs-6">Karam Idly</div>
+                                        <div class="col-md-2 col-xs-2">2</div>
+                                        <div class="col-md-4 col-xs-4 text-right">Rs.110</div>
+                                    </div>
+                                    <div class="row clearfix">
+                                        <div class="col-md-6 col-xs-6">Veg Dosa</div>
+                                        <div class="col-md-2 col-xs-2">1</div>
+                                        <div class="col-md-4 col-xs-4 text-right">Rs.60</div>
+                                    </div>
+                                </div>    
+                                <div class="clearfix gutter-bottom">
+                                    <div class="row clearfix">
+                                        <div class="col-md-6 col-xs-6">Total Cost (2 items))</div>
+                                        <div class="col-md-2 col-xs-2">&nbsp;</div>
+                                        <div class="col-md-4 col-xs-4 text-right">Rs.170</div>
+                                    </div>
+                                    <div class="row clearfix">
+                                        <div class="col-md-6 col-xs-6">Discount</div>
+                                        <div class="col-md-2 col-xs-2">&nbsp;</div>
+                                        <div class="col-md-4 col-xs-4 text-right">Rs.00</div>
+                                    </div>
+                                    <div class="row clearfix">
+                                        <div class="col-md-6 col-xs-6">Delivery Charges</div>
+                                        <div class="col-md-2 col-xs-2">&nbsp;</div>
+                                        <div class="col-md-4 col-xs-4 text-right">Rs.15</div>
+                                    </div>
+                                    <div class="row clearfix gutter-bottom">
+                                        <div class="col-md-6 col-xs-6">Grand Total</div>
+                                        <div class="col-md-2 col-xs-2">&nbsp;</div>
+                                        <div class="col-md-4 col-xs-4 text-right">Rs.185</div>
+                                    </div>
+                                </div>
+                            </div> -->    
+                    </div>
+                    
+                    </div>
+                    <div  class = "col-md-12 center-block" ng-show="isError">
+                        <center><span><h2 class="danger">Invalid Order Number</h2></span></center>
+                    </div>
+                    <div class="tracking" ng-show="isTracking">
+                       
+                        <center>
+                            <div class="clearfix">
+                            <div class="col-md-8 center-block" style="float: none">
+                                <div ng-class="{'status1 success': trackInfo.accepted , 'status1':!trackInfo.accepted }">&nbsp;</div>
+                                <div ng-class="{'process success': trackInfo.accepted , 'process':!trackInfo.accepted }">&nbsp;</div>
+                                <div ng-class="{'status2 success': trackInfo.cooking, 'status2':!trackInfo.cooking  }">&nbsp;</div>
+                                <div ng-class="{'process success': trackInfo.cooking, process:!trackInfo.cooking  }">&nbsp;</div>
+                                <div ng-class="{'status3 success':trackInfo.deliveryBoy , 'status3':!trackInfo.deliveryBoy }">&nbsp;</div>
+                                <div ng-class="{'process success':trackInfo.deliveryBoy , 'process':!trackInfo.deliveryBoy }">&nbsp;</div>
+                                <div ng-class="{'status4 success': trackInfo.delivered, 'status4':!trackInfo.delivered }">&nbsp;</div>
+                            </div> 
+                        </div>
+                        </center>
+                        <h4 class="text-center text-uppercase text-success">On the Way</h4>
+                    </div>    
+                </div>    
+            </div>    
+        </div>
+    </section> 

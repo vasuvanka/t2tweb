@@ -27,7 +27,9 @@ angular.module('t2tApp')
     t2tService.status = function (callback) {
         user.status(callback);
     }
-
+    t2tService.track = function (trackId,callback) {
+        user.track(trackId,callback);
+    }
     t2tService.logout = function (id,token,callback) {
         user.logout(id,token,callback);
     }
@@ -94,9 +96,9 @@ angular.module('t2tApp')
         };
         user.postOrder(id,token,obj,callback);
     }
-    t2tService.updateOrder = function (id,token,od_id,txn_id,txn_type,status,callback) {
-        user.updateOrder(id,token,od_id,{'txn_id':txn_id,'txn_type':txn_type,'status':status},callback);
-    }
+    // t2tService.updateOrder = function (id,token,od_id,txn_id,txn_type,status,callback) {
+    //     user.updateOrder(id,token,od_id,{'txn_id':txn_id,'txn_type':txn_type,'status':status},callback);
+    // }
     t2tService.deleteAccount = function (id,token,callback) {
         user.deleteAccount(id,token,callback);
     }

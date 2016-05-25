@@ -41,12 +41,14 @@
                                 <th>Order Number</th>
                                 <th>Amount</th>
                                 <th>Status</th>
+                                <th>Again</th>
                               </tr>
                               <tr ng-repeat="booking in bookings">
                                 <td data-th="Date">{{booking.createdAt}}</td>
                                 <td data-th="Order Number">{{booking.order_num}}</td>
                                 <td data-th="Amount">{{booking.finalPrice}}</td>
                                 <td data-th="Status"><span class="label label-success">{{booking.status}}</span></td>
+                                <td data-th="repeat"><a href="" class="success" ng-click="reorder(booking)">Repeat</a></td>
                               </tr>
                               <!-- <tr>
                                 <td data-th="Date">01/05/2015</td>

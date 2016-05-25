@@ -11,6 +11,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'localS
     $stateProvider.state('home', { url: '/home', templateUrl: '/main.html', controller: 'mainCtrl' })
     .state('menu', { url: '/menu', templateUrl: '/menu.html', controller: 'menuCtrl' })
     .state('cart', { url: '/cart', templateUrl: '/cart.html',controller: 'cartCtrl' })
+    .state('track', { url: '/track', templateUrl: '/track.html',controller: 'trackCtrl' })
     .state('confirm', { url: '/confirm', templateUrl: '/cart-success.html',controller: 'confirmCtrl' ,isLoginRequired:true })
     .state('profile', { url: '/profile', templateUrl: '/profile.html',controller: 'profileCtrl',isLoginRequired:true })
     .state('txn_post', { url: '/txn_post', templateUrl: '/post-trans.html',controller: 'txnCtrl',isLoginRequired:true });
@@ -19,7 +20,29 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'localS
     .setStorageType('sessionStorage');
 }]);
 
-
+app.controller('trackCtrl', ['cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
+    $scope.isTracking = false;
+    $scope.trackInfo;
+    $scope.isError = false;
+    $scope.getTrackingData = function(trackId){
+        if (trackId == undefined || trackId == null || trackId == "") {
+            $scope.isError = true;
+        }else{
+            ttService.track(trackId,function(data){
+                if (data.status == "success") {
+                    $scope.isTracking = true;
+                    $scope.isError = false;
+                    $scope.trackInfo = data.data.track;
+                    console.log(data.data.track)
+                }else{
+                    $scope.isError = true;
+                    $scope.isTracking = false;
+                }
+                $scope.$apply();
+            })
+        }
+    }
+}]);
 app.controller('txnCtrl', ['cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
     var order = storageService.get("order_summary");
@@ -60,9 +83,10 @@ app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope'
     console.log(order);
     $scope.items = order.items;
 }]);
-app.controller('profileCtrl', ['$modal','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,$rootScope,authService,$scope, ttService, $state, storageService) {
+app.controller('profileCtrl', ['cartService','$modal','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$modal,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
     $scope.couponMsg = "";
+    $rootScope.$broadcast("addressChange",{});
     $scope.isCouponError = false;
     if (node) {
         $scope.username = authService.name;
@@ -106,11 +130,22 @@ app.controller('profileCtrl', ['$modal','$rootScope','authService','$scope', 'tt
 
         });
     };
+    $scope.reorder = function(booking){
+        cartService.clearAll();
+        var cart = booking.items;
+        for (var i = 0; i < cart.length; i++) {
+            cartService.add(cart[i]);
+        }
+        console.log(cart.length);
+        $rootScope.$broadcast("changeCount",{});
+        $state.go("cart");
+    }
     $scope.bookings = [];
     ttService.getOrders(authService.id,authService.token,function(res){
         if (res.status == "success") {
             $scope.bookings = res.data;
-            $scope.$apply();
+            console.log()
+            $scope.$apply(res.data);
         }else{
             alert("Ooops something went wrong ..!")
         }
@@ -122,12 +157,6 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
     $scope.order = {
         'paymentMode':'cod'
     };
-    $scope.color = {
-        name: 'blue'
-      };
-    $scope.setPaymentMode = function(mode){
-        alert(mode);
-    }
     $rootScope.$broadcast("addressChange",{});
     $scope.paymentModeList = ['cod','paytm'];
     $rootScope.$broadcast("userLoginName",{});
@@ -251,12 +280,13 @@ app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$
             item.qty > 0 ? --item.qty : item.qty = 0;
             cartService.remove(item); 
         }
-        $scope.totalCost = cartService.totalCost();
         if ($scope.totalCost < 50) {
             $scope.deliveryFee = 15;
+            $scope.totalCost = cartService.totalCost()+$scope.deliveryFee;
         }
         if ($scope.totalCost == 0) {
             $scope.deliveryFee = 0;
+            $scope.totalCost = cartService.totalCost();
         }
         $rootScope.$broadcast("changeCount",{});
     };

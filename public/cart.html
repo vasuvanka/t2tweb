@@ -35,16 +35,14 @@
                     <small class="primary">*Inclusive of all taxes and charges</small>
             </div>
             <div class="col-md-5 pull-right">
-            <form ng-submit="placeOrder(order)">
+            <form name="cartForm" ng-submit="placeOrder(order)">
                     <div class="row gutter-bottom">
                         <div class="col-md-6">Choose delivery date</div>
                         <div class="col-md-6">
                             <input type="date" id="exampleInput" name="input" ng-model="order.deliveryDate" placeholder="yyyy-MM-dd" ng-change="getSlots()" class="form-control" required />
                            <div role="alert">
-                             <span class="error" ng-show="myForm.input.$error.required">
-                                 Required!</span>
-                             <span class="error" ng-show="myForm.input.$error.date">
-                                 Not a valid date!</span>
+                             <span style="color : red" ng-show="cartForm.order.deliveryDate.$error.required
+                                && cartForm.$submitted">required</span>
                             </div>
                         </div>
 
@@ -61,6 +59,10 @@
                             <option value="">Select Delivery Slot</option>
                                 <option ng-repeat="slot in slots" value="{{slot.value}}">{{slot.text}}</option>
                             </select>
+                            <div role="alert">
+                                <span style="color : red" ng-show="cartForm.order.slot.$error.required
+                                && cartForm.$submitted">required</span>
+                            </div>
                         </div>
                     </div>
                     <div class="row gutter-bottom">
@@ -85,14 +87,19 @@
                     </div>
                     <div class="panel panel-default gutter-vertical" ng-repeat="address in addresses">
                       <div class="panel-body">
-                            <p>{{address.label}} <span class="pull-right">Select&nbsp;<input class="btn" type="radio" ng-model="order.address" name="address" value="{{address}}" required=""></span></p>
+                            <p>{{address.label}} <span class="pull-right">Select&nbsp;<input class="btn" type="radio" ng-model="order.address" name="address" value="{{address}}" required></span></p>
                             <p>
                             {{address.lane1}}, 
                             {{address.lane2 || ""}},{{address.city}}, {{address.state}}. {{address.pincode}} 
                             </p>      
                             <p>{{address.phone}}</p>
                             <span class="label label-default">{{address.label}}</span>
+                            
                       </div>
+                      <div role="alert">
+                        <span style="color : red" ng-show="cartForm.order.address.$error.required
+                        && cartForm.$submitted">required</span>
+                    </div>
                     </div>
                     <div class="clearfix text-right" style="border-top: 1px solid #efefef; padding: 10px 0;">
                             <a href class="btn btn-default btn-small" ng-show="username" ng-click="openAddress()">Add Address  <i class="fa fa-plus-circle" aria-hidden="true"></i></a>

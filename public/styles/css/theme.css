@@ -313,3 +313,120 @@ body{
         min-width: 300px;
     }
 }
+
+.status1{
+    background-image: url(../images/status-1.png);
+    background-repeat: no-repeat;
+    background-size: 40px 100px;
+    background-position: 0 0;
+    width: 40px;
+    height: 40px;
+    float: left;
+}
+.status1.success,
+.status2.success,
+.status3.success,
+.status4.success{
+    background-position: 0 -56px;
+}
+.status2{
+    background-image: url(../images/status-2.png);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 40px 100px;
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin-left: -2px;
+}
+.status3{
+    background-image: url(../images/status-3.png);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 40px 100px;
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin-left: -2px;
+}
+.status4{
+    background-image: url(../images/status-4.png);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 40px 100px;
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin-left: -2px;
+}
+.process{
+    width: 20px;
+    height: 5px;
+    margin-top: 20px;
+    background-color: #5d5d5d;
+    float: left;
+}
+.process.success{
+    background-color: #1e9a46;
+}
+.tracking{
+    padding: 50px 0 50px;
+}
+.text-success{
+    color: #1e9a46;
+}
+
+@media (min-width: 768px){
+    .status1{
+        background-image: url(../../images/status-1.png);
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-size: 80px 200px;
+        width: 80px;
+        height: 80px;
+        float: left;
+    }
+    .status1.success,
+    .status2.success,
+    .status3.success,
+    .status4.success{
+        background-position: 0 -112px;
+    }
+    .status2{
+        background-image: url(../../images/status-2.png);
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-size: 80px 200px;
+        width: 80px;
+        height: 80px;
+        float: left;
+        margin-left: -2px;
+    }
+    .status3{
+        background-image: url(../../images/status-3.png);
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-size: 80px 200px;
+        width: 80px;
+        height: 80px;
+        float: left;
+        margin-left: -2px;
+    }
+    .status4{
+        background-image: url(../../images/status-4.png);
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-size: 80px 200px;
+        width: 80px;
+        height: 80px;
+        float: left;
+        margin-left: -2px;
+    }
+    .process{
+        width: 135px;
+        height: 10px;
+        margin-top: 36px;
+        background-color: #5d5d5d;
+        float: left;
+    }
+}

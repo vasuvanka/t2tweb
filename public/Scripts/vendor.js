@@ -182,7 +182,12 @@ User.prototype.getOrders = function(id,token,callback){
 		callback(res);
 	});
 }
-
+User.prototype.track = function(id,callback){
+	var header = {"Content-Type":"application/json"};
+	xhrRequest( url+'/track/'+id,header ,'GET', {}, function(res){
+		callback(res);
+	});
+}
 User.prototype.postOrder = function(id,token,data,callback){
 	var header = {"token":token,'app_user_id':id,"Content-Type":"application/json"};
 	xhrRequest( url+'/orders',header ,'POST', data, function(res){
@@ -202,21 +207,16 @@ User.prototype.verifyCoupon = function(id,token,coupon,callback){
 }
 
 
-User.prototype.updateOrder = function(id,token,order_id,data,callback){
-	/*{
-		"txn_id":req.body.txn_id,
-		"txn_type":req.body.txn_type,
-		"status":req.body.status
-	}*/
-	if (order_id != undefined && order_id != null) {
-		var header = {"token":token,'app_user_id':id,"Content-Type":"application/json"};
-		xhrRequest( url+'/order/'+order_id,header ,'PUT', data, function(res){
-			callback(res);
-		});
-	}else{
-		return {'status':'error','error':["invalid order"],'data':[]};
-	}
-}
+// User.prototype.updateOrder = function(id,token,order_id,data,callback){
+// 	if (order_id != undefined && order_id != null) {
+// 		var header = {"token":token,'app_user_id':id,"Content-Type":"application/json"};
+// 		xhrRequest( url+'/order/'+order_id,header ,'PUT', data, function(res){
+// 			callback(res);
+// 		});
+// 	}else{
+// 		return {'status':'error','error':["invalid order"],'data':[]};
+// 	}
+// }
 
 User.prototype.deleteAccount = function(id,token,callback){
 	var header = {"token":token,'app_user_id':id,"Content-Type":"application/json"};

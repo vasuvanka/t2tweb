@@ -64,7 +64,7 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class=""><a ui-sref="home">Home</a></li>
-                        <li class=""><a href="">Track</a></li>
+                        <li class=""><a ui-sref="track">Track</a></li>
                         <!-- <li><a href="#" ui-sref="cart">Cart</a></li>
                         <li><a href="#" ui-sref="listing">Listing</a></li>
                         <li><a href="#" ui-sref="confirm">Cart Success</a></li> -->
@@ -111,10 +111,10 @@
                   <input type="text" ng-model="reg.lastname"  placeholder="Last Name" class="form-control input-lg" required>  
                 </div> 
                 <div class="clearfix gutter-bottom">
-                  <input type="email" ng-model="reg.email" placeholder="Email Here" class="form-control input-lg" required>  
+                  <input type="email" ng-model="reg.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="Email Here" class="form-control input-lg" required>  
                 </div>
                 <div class="clearfix gutter-bottom">
-                  <input type="text" ng-model="reg.phone" pattern="[0-9]{10}" placeholder="10 digit Mobile Number" class="form-control input-lg" required>  
+                  <input type="text" ng-model="reg.phone" pattern="^[0-9]{10}$" placeholder="10 digit Mobile Number" class="form-control input-lg" required>  
                 </div> 
                 <div class="clearfix gutter-bottom">
                   <input type="password" ng-model="reg.password" placeholder="password" class="form-control input-lg" required>  
