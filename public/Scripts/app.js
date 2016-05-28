@@ -60,7 +60,7 @@ app.controller('txnCtrl', ['cartService','$rootScope','authService','$scope', 't
     }
 
 }]);
-app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
+app.controller('confirmCtrl', ['$modal','cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
     cartService.clearAll();
     $rootScope.$broadcast("changeCount",{});
