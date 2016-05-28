@@ -1,16 +1,15 @@
 "use strict";
 angular.module("t2tApp").controller('regModalCtrl', ['$rootScope','ttService','$scope', '$modalInstance', 'entity', function ($rootScope,ttService,$scope, $modalInstance, entity) {
     $scope.entity = entity;
-    $scope.isError = false;
+    $scope.showDiv = false;
     $scope.register = function(data){
         ttService.register(data,function(obj){
+        console.log(obj);
         $scope.regStatus = obj.status == 'success';
-        if (!$scope.regStatus) {
-                $scope.isError = true;
-                $scope.error = obj.error[0];
-            }
-            $scope.reg={};
-            $scope.$apply();
+        $scope.showDiv = true;
+        $scope.regStatusMsg = $scope.regStatus ? 'Registration Success' : 'Email or Mobile Number already Registered';
+        $scope.reg={};
+        $scope.$apply();
       });
     }
      $scope.ok = function () {
@@ -59,7 +58,7 @@ angular.module("t2tApp").controller('loginModalCtrl', ['$modal','$rootScope','tt
         }else{
             $scope.isError = true;
             $scope.creditials.password = '';
-            $scope.error = "invalid creditials";
+            $scope.error = "Invalid Creditials";
         }
         $scope.$apply();
       });
@@ -90,8 +89,9 @@ angular.module("t2tApp").controller('loginModalCtrl', ['$modal','$rootScope','tt
  }]);
 angular.module("t2tApp").controller('addressModalCtrl', ['$state','$rootScope','ttService','storageService','authService','$scope', '$modalInstance', 'entity', function ($state,$rootScope,ttService,storageService,authService,$scope, $modalInstance, entity) {
      $scope.entity = entity;
-     $scope.isError = false ;
-     $scope.isSuccess = false;
+     $scope.checked = false ;
+     $scope.adStatus = false;
+     $scope.showDiv = false;
      $scope.address = {};
      var loc = storageService.get("loc");
      var city = storageService.get("city");
@@ -100,24 +100,20 @@ angular.module("t2tApp").controller('addressModalCtrl', ['$state','$rootScope','
      $scope.address.lane2 = loc.location || "";
      $scope.address.city = city || "";
      $scope.save = function (address){
+
         node.address.push(address);
         ttService.updateProfile(authService.id,authService.token,{address:node.address},function(obj){
-            if (obj.status == "error") {
-                $scope.isSuccess = false;
-                $scope.isError = true;
-                setTimeout(function(){
-                    $modalInstance.dismiss('cancel');
-                    $state.go("home");
-                },1500);
-            }else{
-                $scope.isSuccess = true;
-                $scope.successMsg = "Address Added ..!";
-                var node = storageService.get("userNode");
-                node.address = obj.data.address;
-                storageService.set("userNode",node);
-                $rootScope.$broadcast("addressChange",{});
-                $modalInstance.dismiss($scope.entity);
-            }
+                $scope.adStatus = obj.status == 'success';
+                $scope.showDiv = true;
+                $scope.addressMsg = $scope.adStatus ? 'Address Added' : 'Invalid Details';
+                $scope.checked = $scope.adStatus ? true : false ;
+                if ($scope.adStatus) {
+                    var node = storageService.get("userNode");
+                    node.address = obj.data.address;
+                    storageService.set("userNode",node);
+                    $rootScope.$broadcast("addressChange",{});
+                }
+                $scope.$apply();
         });
      }
      $scope.cancel = function () {

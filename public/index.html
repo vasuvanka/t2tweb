@@ -64,8 +64,8 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class=""><a ui-sref="home">Home</a></li>
-                        <li class=""><a ui-sref="track">Track</a></li>
-                        <!-- <li><a href="#" ui-sref="cart">Cart</a></li>
+                        <li><a ui-sref="track">Track</a></li>
+                        <li><a ui-sref="aboutus">About Us</a></li><!-- 
                         <li><a href="#" ui-sref="listing">Listing</a></li>
                         <li><a href="#" ui-sref="confirm">Cart Success</a></li> -->
 
@@ -73,7 +73,7 @@
                         <!-- <li>{{45+35}}</li> -->
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class=""><a href >Contact Us</a></li>
+                        <li class=""><a href ui-sref = "cs" >Contact Us</a></li>
                         <li><a href ng-show="!username" ng-click="openRegistration()">Sign Up</a></li>
                         <li><a href ng-click="openLogin()" ng-show="!username">Sign In</a></li>
                         <li><a href="#/profile" >{{ username }}</a></li>
@@ -99,9 +99,8 @@
            <h4 class="modal-title">Registration</h4>
        </div>
        <div class="modal-body clearfix">
-        <div ng-class="regStatus ? 'alert alert-success':'alert alert-danger'" ng-show="isError">
-            <strong ng-show="regStatus">registration success</strong>
-            <strong ng-show="!regStatus">{{error}}</strong>.
+        <div ng-class="{'alert alert-success':regStatus ,'alert alert-danger':!regStatus}" ng-show="showDiv">
+            <strong>{{regStatusMsg}}</strong>
           </div>
           <form name="regForm" ng-submit="register(reg)">
                 <div class="clearfix gutter-bottom">
@@ -126,7 +125,7 @@
             </div> 
        </div>
        <div class="modal-footer">
-           <div class="text-center small">By Signing in, you are agree to the <a href="#" target="_blank">Terms and Conditions</a></div>
+           <div class="text-center small">By Signing in, you are agree to the <a ui-sref="tandc" target="_blank">Terms and Conditions</a></div>
            <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
        </div>
    </div>
@@ -206,11 +205,8 @@
           </div>
           <div class="modal-body">
                     <center>
-                      <div ng-show="isError" class="alert alert-danger">
-                        <strong>Error Occured!</strong> 
-                      </div>
-                      <div ng-show="isSuccess" class="alert alert-success">
-                        <strong>{{successMsg}}</strong> 
+                      <div ng-class="{'alert alert-success':adStatus ,'alert alert-danger':!adStatus}" ng-show="showDiv">
+                        <strong>{{addressMsg}}</strong> 
                       </div>
                     </center>
                     <div class="clearfix gutter-bottom">
@@ -225,15 +221,15 @@
                     <div class="clearfix gutter-bottom row">
                         <div class="col-md-4"><input ng-model="address.city" type="text" class="form-control input-lg" placeholder="City" disabled></div>
                         <div class="col-md-4"><input type="text" ng-model="address.state" class="form-control input-lg" placeholder="State" required></div>
-                        <div class="col-md-4"><input type="text" pattern="[0-9]{6}" ng-model="address.postalCode" class="form-control input-lg" placeholder="Postal Code" required></div>
+                        <div class="col-md-4"><input type="text" pattern="[0-9]{6}$" ng-model="address.postalCode" class="form-control input-lg" placeholder="Postal Code" required></div>
                     </div>
                     <div class="clearfix gutter-bottom">
-                        <input type="text" placeholder="Phone Number" ng-model="address.phone" pattern="[0-9]{10}" class="form-control input-lg">
+                        <input type="text" placeholder="Phone Number" ng-model="address.phone" pattern="[0-9]{10}$" class="form-control input-lg">
                     </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
-            <button type="submit" class="btn btn-primary">Add Address</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="checked">Add Address</button>
           </div>
         </form>
         </div>

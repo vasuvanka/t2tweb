@@ -8,7 +8,15 @@
                           <i class="fa fa-user fa-stack-1x fa-inverse"></i>
                         </div>
                         <div class="pull-left">
-                            <h4>{{user.firstname}} &nbsp; {{user.lastname}}</h4>
+                        <div class="center-block">
+                          <h4 ng-show="!changeFlag">{{user.firstname}} &nbsp; {{user.lastname}}</h4><a href="" ng-click="changeFlag = !changeFlag"><span ng-show="!changeFlag" class="glyphicon glyphicon-edit"></span></a>
+                        </div>
+                          
+                          
+                          <div ng-show="changeFlag" class="row">
+                            <input type="text" ng-model="user.firstname" placeholder="First Name"><input type="text" ng-model="user.lastname" placeholder="Last Name"><button ng-click="updateName(user.firstname,user.lastname)" class="btn btn-xs btn-primary">Update</button>
+                          
+                        </div>
                             <p>{{user.email}}</p>
                             <p>{{user.phone}}</p>
                         </div>    
@@ -28,9 +36,9 @@
                                 <span class="label label-default">{{address.label}}</span>
                           </div>
                         </div>
-                        <div class="clearfix text-right" style="border-top: 1px solid #efefef; padding: 10px 0;">
+                        <!-- <div class="clearfix text-right" style="border-top: 1px solid #efefef; padding: 10px 0;">
                                 <a href class="btn btn-default btn-small" ng-click="openAddress()">Add Address  <i class="fa fa-plus-circle" aria-hidden="true"></i></a>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-md-6 pull-right">
                         <h5 class="text-uppercase"><i class="fa fa-book" aria-hidden="true"></i> Order History</h5>

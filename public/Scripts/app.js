@@ -12,8 +12,14 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'localS
     .state('menu', { url: '/menu', templateUrl: '/menu.html', controller: 'menuCtrl' })
     .state('cart', { url: '/cart', templateUrl: '/cart.html',controller: 'cartCtrl' })
     .state('track', { url: '/track', templateUrl: '/track.html',controller: 'trackCtrl' })
+    .state('faq', { url: '/faqandhelpline', templateUrl: '/faq.html' })
+    .state('cs', { url: '/customercare', templateUrl: '/cs.html' })
+    .state('policy', { url: '/policy', templateUrl: '/policy.html' })
+    .state('aboutus', { url: '/aboutus', templateUrl: '/aboutus.html' })
+    .state('jobs', { url: '/careers', templateUrl: '/jobs.html' })
     .state('confirm', { url: '/confirm', templateUrl: '/cart-success.html',controller: 'confirmCtrl' ,isLoginRequired:true })
     .state('profile', { url: '/profile', templateUrl: '/profile.html',controller: 'profileCtrl',isLoginRequired:true })
+    .state('tandc', { url: '/terms', templateUrl: '/tandc.html' })
     .state('txn_post', { url: '/txn_post', templateUrl: '/post-trans.html',controller: 'txnCtrl',isLoginRequired:true });
 
     localStorageServiceProvider
@@ -52,6 +58,15 @@ app.controller('txnCtrl', ['cartService','$rootScope','authService','$scope', 't
     }else{
         $state.go("home");
     }
+    if (order._id) {
+        ttService.getOrderById(authService.id,authService.token,order._id,function(obj){
+            console.log(obj);
+            debugger;
+        });
+    }else{
+        $state.go("profile");
+    }
+
 }]);
 app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
@@ -71,11 +86,7 @@ app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope'
     }else{
         $state.go("home");
     }
-    $rootScope.$on("logoutActivity",function(obj){
-        storageService.clearAll();
-        authService.status = false;
-        $state.go("home");
-    });
+    $rootScope.$broadcast("logoutActivity",{});
     var od_date = new Date(order.createdAt);
     $scope.od_date = od_date.getDate()+'-'+(od_date.getMonth()+1)+'-'+od_date.getFullYear();
     var dl_date = new Date(order.deliveryDate);
@@ -85,6 +96,7 @@ app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope'
 }]);
 app.controller('profileCtrl', ['cartService','$modal','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$modal,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
+    $scope.changeFlag = false;
     $scope.couponMsg = "";
     $rootScope.$broadcast("addressChange",{});
     $scope.isCouponError = false;
@@ -93,6 +105,21 @@ app.controller('profileCtrl', ['cartService','$modal','$rootScope','authService'
         $scope.user = node;
     }else{
         $state.go("home");
+    }
+    $scope.updateName = function(first,last){
+        ttService.updateProfile(authService.id,authService.token,{firstname:first,lastname:last},function(obj){
+            if (obj.status == "success") {
+                $scope.changeFlag = false;
+                node.firstname = first;
+                node.lastname = last;
+                storageService.set("userNode",node);
+                $scope.user = node;
+                $scope.$apply();
+            }else{
+                alert("Oops..")
+            }
+            
+        });
     }
     $rootScope.$on("logoutActivity",function(obj){
         storageService.clearAll();
@@ -113,7 +140,7 @@ app.controller('profileCtrl', ['cartService','$modal','$rootScope','authService'
         storageService.set("userNode",node);
         $scope.user = node;
         ttService.updateProfile(authService.id,authService.token,{address:node.address},function(obj){
-            debugger;
+            console.log("removed");
         });
     }
     $scope.openAddress = function () {
@@ -491,6 +518,15 @@ app.controller('baseController', [ '$rootScope','cartService' ,'$modal','storage
     $rootScope.$on("changeCount",function(obj){
         $scope.count = cartService.count();
     });
+    var node = storageService.get("userNode");
+    if (node) {
+            authService.id = node.id;
+            authService.name = node.firstname+" "+node.lastname;
+            authService.token = node.token;
+            authService.address = node.address;
+            $rootScope.$broadcast("userLoginName",{});
+            $rootScope.$broadcast("addressChange",{});
+    }
     $rootScope.$on("userLoginName",function(obj){
         $scope.username = authService.name;
     });

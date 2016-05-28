@@ -77,6 +77,10 @@ angular.module('t2tApp')
     t2tService.getOrders = function(id,token,callback){
         user.getOrders(id,token,callback);
     }
+    t2tService.getOrderById = function(id,token,order_id,callback){
+        user.getOrders(id,token,order_id,callback);
+    }
+    
     t2tService.postOrder = function (id,token,items,address,coupon,couponValue,totalPrice,finalPrice,deliveryDate,slot,msg,txn_type,callback) {
         if (items.length <= 0) {
             return {'status':'error','data':[],'error':['no items in the cart']};
