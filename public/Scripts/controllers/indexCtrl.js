@@ -160,3 +160,23 @@ angular.module("t2tApp").controller('errorModalCtrl', ['$state','$rootScope','tt
          $modalInstance.dismiss('cancel');
      };    
  }]);
+
+angular.module("t2tApp").controller('codModalCtrl', ['$state','$rootScope','ttService','storageService','authService','$scope', '$modalInstance', 'entity', function ($state,$rootScope,ttService,storageService,authService,$scope, $modalInstance, entity) {
+     $scope.entity = entity;
+     $scope.cancel = function () {
+         $modalInstance.dismiss('cancel');
+     };
+     $scope.msg = "";
+     $scope.updateOrder = function(){
+        var order = storageService.get("order_summery");
+        if (order) {
+            ttService.updateOrder(authService.id,authService.token,order._id,{txn_type:"cod"},function(obj){
+                if (obj.status == "success") {
+                    $scope.msg = "order placed";
+                }else{
+                    $scope.msg = "Ooops Place Order Again";
+                }
+            })
+        }
+     }    
+ }]);

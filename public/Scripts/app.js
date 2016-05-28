@@ -58,14 +58,6 @@ app.controller('txnCtrl', ['cartService','$rootScope','authService','$scope', 't
     }else{
         $state.go("home");
     }
-    if (order._id) {
-        ttService.getOrderById(authService.id,authService.token,order._id,function(obj){
-            console.log(obj);
-            debugger;
-        });
-    }else{
-        $state.go("profile");
-    }
 
 }]);
 app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
@@ -83,6 +75,24 @@ app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope'
             $scope.deliveryFee = 0;
             $scope.slot = order.slot.startHrs+':'+order.slot.startMins+' AM - '+order.slot.stopHrs+':'+order.slot.stopMins+" AM";
         }
+        ttService.getOrderById(authService.id,authService.token,order._id,function(obj){
+            console.log(obj);
+            if(obj.status == "success"){
+                $scope.finalObj = obj.data;
+                if (obj.data.status == "cancelled") {
+                    ttService.updateOrder(authService.id,authService.token,{txn_type:"cod"},function(resp){
+                        if (resp.status == "success") {
+                            debugger;
+                        }else{
+                            debugger;
+                        }
+                    })
+                }
+            }else{
+                $state.go("profile");
+            }
+            
+        });
     }else{
         $state.go("home");
     }
