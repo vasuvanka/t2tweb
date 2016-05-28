@@ -80,13 +80,25 @@ app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope'
             if(obj.status == "success"){
                 $scope.finalObj = obj.data;
                 if (obj.data.status == "cancelled") {
-                    ttService.updateOrder(authService.id,authService.token,obj.data._id,{txn_type:"cod"},function(resp){
-                        if (resp.status == "success") {
-                            debugger;
-                        }else{
-                            debugger;
-                        }
-                    })
+                    // ttService.updateOrder(authService.id,authService.token,obj.data._id,{txn_type:"cod"},function(resp){
+                    //     if (resp.status == "success") {
+                    //         debugger;
+                    //     }else{
+                    //         debugger;
+                    //     }
+                    // })
+                    var modalInstance = $modal.open({
+                     templateUrl: 'codpopup.html',
+                     controller: 'codModalCtrl',
+                     resolve: {
+                         entity: function () {
+                             return $scope.entity;
+                         }
+                     }
+                    });
+                    modalInstance.result.then(function (selectedItem) {             
+
+                    });
                 }
             }else{
                 $state.go("profile");
