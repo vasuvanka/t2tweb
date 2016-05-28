@@ -217,7 +217,7 @@ User.prototype.verifyCoupon = function(id,token,coupon,callback){
 User.prototype.updateOrder = function(id,token,order_id,data,callback){
 	if (order_id != undefined && order_id != null) {
 		var header = {"token":token,'app_user_id':id,"Content-Type":"application/json"};
-		xhrRequest( url+'/order/'+order_id,header ,'PUT', data, function(res){
+		xhrRequest( url+'/orders/'+order_id,header ,'PUT', data, function(res){
 			callback(res);
 		});
 	}else{
