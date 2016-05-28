@@ -77,8 +77,8 @@ angular.module('t2tApp')
     t2tService.getOrders = function(id,token,callback){
         user.getOrders(id,token,callback);
     }
-    t2tService.getOrderById = function(id,token,order_id,callback){
-        user.getOrderById(id,token,order_id,callback);
+    t2tService.getOrderById = function(id,token,order_id,data,callback){
+        user.getOrderById(id,token,order_id,data,callback);
     }
     
     t2tService.postOrder = function (id,token,items,address,coupon,couponValue,totalPrice,finalPrice,deliveryDate,slot,msg,txn_type,callback) {

@@ -80,7 +80,7 @@ app.controller('confirmCtrl', ['cartService','$rootScope','authService','$scope'
             if(obj.status == "success"){
                 $scope.finalObj = obj.data;
                 if (obj.data.status == "cancelled") {
-                    ttService.updateOrder(authService.id,authService.token,{txn_type:"cod"},function(resp){
+                    ttService.updateOrder(authService.id,authService.token,obj.data._id,{txn_type:"cod"},function(resp){
                         if (resp.status == "success") {
                             debugger;
                         }else{
