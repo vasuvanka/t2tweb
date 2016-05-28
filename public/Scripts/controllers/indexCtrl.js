@@ -168,7 +168,7 @@ angular.module("t2tApp").controller('codModalCtrl', ['$state','$rootScope','ttSe
      };
      $scope.msg = "";
      $scope.updateOrder = function(){
-        var order = storageService.get("order_summery");
+        var order = storageService.get("order_summary");
         if (order) {
             ttService.updateOrder(authService.id,authService.token,order._id,{txn_type:"cod"},function(obj){
                 if (obj.status == "success") {
