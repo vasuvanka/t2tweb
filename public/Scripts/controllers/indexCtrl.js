@@ -176,6 +176,7 @@ angular.module("t2tApp").controller('codModalCtrl', ['$state','$rootScope','ttSe
                 }else{
                     $scope.msg = "Ooops Place Order Again";
                 }
+                $scope.$apply();
             })
         }
      }    
