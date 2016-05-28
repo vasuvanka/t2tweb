@@ -100,8 +100,8 @@ angular.module('t2tApp')
         };
         user.postOrder(id,token,obj,callback);
     }
-    t2tService.updateOrder = function (id,token,id,data,callback) {
-        user.updateOrder(id,token,id,data,callback);
+    t2tService.updateOrder = function (id,token,order_id,data,callback) {
+        user.updateOrder(id,token,order_id,data,callback);
     }
     t2tService.deleteAccount = function (id,token,callback) {
         user.deleteAccount(id,token,callback);
