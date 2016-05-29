@@ -112,6 +112,7 @@ angular.module("t2tApp").controller('addressModalCtrl', ['$state','$rootScope','
                     node.address = obj.data.address;
                     storageService.set("userNode",node);
                     $rootScope.$broadcast("addressChange",{});
+                    $modalInstance.dismiss('cancel');
                 }
                 $scope.$apply();
         });
@@ -167,12 +168,15 @@ angular.module("t2tApp").controller('codModalCtrl', ['$state','$rootScope','ttSe
          $modalInstance.dismiss('cancel');
      };
      $scope.msg = "";
+     $scope.checked = false;
      $scope.updateOrder = function(){
         var order = storageService.get("order_summary");
         if (order) {
             ttService.updateOrder(authService.id,authService.token,order._id,{txn_type:"cod"},function(obj){
                 if (obj.status == "success") {
                     $scope.msg = "order placed";
+                    $scope.checked = true;
+                    $rootScope.$broadcast("changeOrder",{})
                 }else{
                     $scope.msg = "Ooops Place Order Again";
                 }

@@ -14,11 +14,13 @@
                         For any query or support, we can be reached at Contact Number: +91-809-990-6000
                         Email: care@time2tiffin.in
                     </p>
-                    <p> order status : <strong ng-class="{'success':finalObj.status == 'pending','danger':finalObj.status == 'cancelled'}">{{finalObj.status}}</strong></p>
+                    <p><h3 ng-class="{'success':order.status == 'pending','danger':order.status == 'cancelled'}">
+                        <strong>{{msg}}</strong>
+                    </h3> </p>
                 </center>
             </div>
             <div class="clearfix row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h4>Order Summary</h4>
                     <p>
                         Order Number:<strong>{{order.order_num}}</strong> <br>
@@ -30,7 +32,7 @@
 
                     </p>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h4>Shipping Address</h4>
                     <p>
                         Name: {{user.firstname+" "+user.lastname}}<br>
@@ -39,6 +41,13 @@
                         City: {{order.address.city}}<br>
                         Pin Code: {{order.address.postalCode}}
                     </p>
+                </div>
+                <div class="col-md-4 pull right">
+                    <a href="" ng-click="trackOrder(order.order_num)">
+                    <h4>Track Your Order</h4>
+                    <p>
+                        <div class="status3 success">&nbsp;</div>
+                    </p></a>
                 </div>
             </div>
             <div class="clearfix">

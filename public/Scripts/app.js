@@ -48,74 +48,25 @@ app.controller('trackCtrl', ['cartService','$rootScope','authService','$scope', 
             })
         }
     }
-}]);
-app.controller('txnCtrl', ['cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
-    var node = storageService.get("userNode");
-    var order = storageService.get("order_summary");
-    if (node && order) {
-        $scope.order = order;
-        $scope.user = node;
-    }else{
-        $state.go("home");
-    }
-
-}]);
-app.controller('confirmCtrl', ['$modal','cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
-    var node = storageService.get("userNode");
-    cartService.clearAll();
-    $rootScope.$broadcast("changeCount",{});
-    var order = storageService.get("order_summary");
-    if (node && order) {
-        $scope.order = order;
-        $scope.user = node;
-        if (order.slot.startHrs == 99) {
-            $scope.slot = "Immediate";
-            $scope.deliveryFee = 20 ;
-        }else{
-            $scope.deliveryFee = 0;
-            $scope.slot = order.slot.startHrs+':'+order.slot.startMins+' AM - '+order.slot.stopHrs+':'+order.slot.stopMins+" AM";
-        }
-        ttService.getOrderById(authService.id,authService.token,order._id,function(obj){
-            console.log(obj);
-            if(obj.status == "success"){
-                $scope.finalObj = obj.data;
-                if (obj.data.status == "cancelled") {
-                    // ttService.updateOrder(authService.id,authService.token,obj.data._id,{txn_type:"cod"},function(resp){
-                    //     if (resp.status == "success") {
-                    //         debugger;
-                    //     }else{
-                    //         debugger;
-                    //     }
-                    // })
-                    var modalInstance = $modal.open({
-                     templateUrl: 'codpopup.html',
-                     controller: 'codModalCtrl',
-                     resolve: {
-                         entity: function () {
-                             return $scope.entity;
-                         }
-                     }
-                    });
-                    modalInstance.result.then(function (selectedItem) {             
-
-                    });
+    var trackId = storageService.get("order_num")
+    if (trackId) {
+        $scope.trackId = trackId;
+        $scope.isError = true;
+            ttService.track(trackId,function(data){
+                if (data.status == "success") {
+                    $scope.isTracking = true;
+                    $scope.isError = false;
+                    $scope.trackInfo = data.data.track;
+                    console.log(data.data.track)
+                }else{
+                    $scope.isError = true;
+                    $scope.isTracking = false;
                 }
-            }else{
-                $state.go("profile");
-            }
-            
-        });
-    }else{
-        $state.go("home");
+                $scope.$apply();
+            })
     }
-    $rootScope.$broadcast("logoutActivity",{});
-    var od_date = new Date(order.createdAt);
-    $scope.od_date = od_date.getDate()+'-'+(od_date.getMonth()+1)+'-'+od_date.getFullYear();
-    var dl_date = new Date(order.deliveryDate);
-    $scope.dl_date = dl_date.getDate()+'-'+(dl_date.getMonth()+1)+'-'+dl_date.getFullYear();
-    console.log(order);
-    $scope.items = order.items;
 }]);
+
 app.controller('profileCtrl', ['cartService','$modal','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$modal,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
     $scope.changeFlag = false;
@@ -200,254 +151,7 @@ app.controller('profileCtrl', ['cartService','$modal','$rootScope','authService'
         }
     });
 }]);
-app.controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,$rootScope,cartService,authService,$scope, ttService, $state, storageService) {
-    $scope.slots = [];
-    var slots = [];
-    $scope.order = {
-        'paymentMode':'cod'
-    };
-    $rootScope.$broadcast("addressChange",{});
-    $scope.paymentModeList = ['cod','paytm'];
-    $rootScope.$broadcast("userLoginName",{});
-    var node = storageService.get("userNode");
-    $scope.cartList = cartService.getCart();
-    $rootScope.$on('addressChange',function(obj){
-        var node = storageService.get("userNode");
-        if (node) {
-            $scope.addresses = node.address;
-        }else{
-            $scope.addresses = [];
-        }
-        console.log($scope.addresses);
-        $scope.$apply();
-    });
-    $scope.addresses = authService.address;
-    $scope.isValidCoupon = false;
-    var openErrorDialog = function () {
-        var modalInstance = $modal.open({
-         templateUrl: 'errorpopup.html',
-         controller: 'errorModalCtrl',
-         size:"sm",
-         resolve: {
-             entity: function () {
-                 return $scope.entity;
-             }
-         }
-        });
-        modalInstance.result.then(function (selectedItem) {             
 
-        });
-    }
-    $scope.minDate = new Date().getFullYear()+"-"+new Date().getMonth()+"-"+new Date().getDate();
-    $scope.getSlots = function(){
-        var date = new Date($scope.order.deliveryDate).getDate();
-        var month = new Date($scope.order.deliveryDate).getMonth();
-        var year = new Date($scope.order.deliveryDate).getFullYear();
-        var d = new Date();
-        if (year == d.getFullYear()) {
-            if (month >= d.getMonth()) {
-                if (date>= d.getDate()) {
-                    if (date == d.getDate()) {
-                            ttService.slots(function(data){
-                                if (data.status == "success") {
-                                    if (data.data.length > 0) {
-                                        var slotList = [{text:"Immediate",value:{
-                                        startHrs:99,
-                                        startMins:99,
-                                        duration:0,
-                                        stopMins:99,
-                                        stopHrs:99
-                                    }}];
-                                    slots = data.data;
-                                    data.data.forEach(function(slot){
-                                        slots.push(slot);
-                                        var s_hrs = slot.startHrs < 10 ? '0'+slot.startHrs : slot.startHrs;
-                                        var s_mins = slot.startMins < 10 ? '0' + slot.startMins : slot.startMins ;
-                                        var e_hrs = slot.stopHrs < 10 ? '0'+slot.stopHrs : slot.stopHrs;
-                                        var e_mins = slot.stopMins < 10 ? '0'+slot.stopMins : slot.stopMins;
-                                        var slotText = s_hrs+" : "+s_mins +" AM - "+e_hrs+" : "+e_mins+" AM";
-                                        slotList.push({text:slotText,value:slot});
-                                    });
-                                    $scope.slots = slotList;
-                                    }else{
-                                        $scope.slots = [];
-                                    }
-                                    $scope.$digest();
-                                }else{
-                                    alert("Oops something went wrong...!")
-                                }
-                            });
-                    }else{
-                        ttService.allSlots(function(data){
-                            if (data.status == "success") {
-                                var slotList = [];
-                                slots = data.data;
-                                data.data.forEach(function(slot){
-                                    var s_hrs = slot.startHrs < 10 ? '0'+slot.startHrs : slot.startHrs;
-                                    var s_mins = slot.startMins < 10 ? '0' + slot.startMins : slot.startMins ;
-                                    var e_hrs = slot.stopHrs < 10 ? '0'+slot.stopHrs : slot.stopHrs;
-                                    var e_mins = slot.stopMins < 10 ? '0'+slot.stopMins : slot.stopMins;
-                                    var slotText = s_hrs+" : "+s_mins +" AM - "+e_hrs+" : "+e_mins+" AM";
-                                    slotList.push({text:slotText,value:slot});
-                                });
-                                $scope.slots = slotList;
-                                $scope.$digest();
-                            }else{
-                                alert("Oops something went wrong...!")
-                            }
-                        })
-                    }
-                }else{
-                    openErrorDialog();
-                    // alert("invalid date selection")
-                }
-            }else{
-                openErrorDialog();
-                // alert("invalid month selection")
-            }
-        }else{
-            openErrorDialog();
-            // alert("invalid year selection")
-        }
-    }
-    var dfeeApplied = false;
-    var totalCost = cartService.totalCost();
-    $scope.deliveryFee = 0;
-    if (totalCost < 50) {
-        dfeeApplied = true;
-       $scope.deliveryFee = 15; 
-    }
-    if (totalCost == 0) {
-       $scope.deliveryFee = 0; 
-    }
-    $scope.totalCost = cartService.totalCost()+$scope.deliveryFee;
-    $scope.countFunc=function(isIncr,item){
-        if (isIncr) {
-            item.qty = ++item.qty;
-            cartService.add(item);
-        }else{
-            item.qty > 0 ? --item.qty : item.qty = 0;
-            cartService.remove(item); 
-        }
-        if ($scope.totalCost < 50) {
-            $scope.deliveryFee = 15;
-            $scope.totalCost = cartService.totalCost()+$scope.deliveryFee;
-        }
-        if ($scope.totalCost == 0) {
-            $scope.deliveryFee = 0;
-            $scope.totalCost = cartService.totalCost();
-        }
-        $rootScope.$broadcast("changeCount",{});
-    };
-    $scope.openAddress = function () {
-        var modalInstance = $modal.open({
-         templateUrl: 'addresspopup.html',
-         controller: 'addressModalCtrl',
-         resolve: {
-             entity: function () {
-                 return $scope.entity;
-             }
-         }
-        });
-        modalInstance.result.then(function (selectedItem) {             
-
-        });
-    };
-    $scope.updatePaymentType = function(ptype){
-        $scope.$digest();
-    } 
-    $scope.couponEntered = false;
-    $scope.validateCoupon = function(coupon){
-        if(coupon.toString().length >= 6){
-            if (authService.status) {
-               ttService.verifyCoupon(authService.id,authService.token,coupon,function(obj){
-                $scope.couponEntered = true;
-                if (obj.status == "error") {
-                        $scope.isValidCoupon = false; 
-                        $scope.couponMsg = "Invalid Coupon";
-                    }else{
-                        $scope.isValidCoupon = true;
-                        $scope.couponMsg = "Coupon Applied"; 
-                    }
-                $scope.$apply();
-               })
-            }else{
-                showloginpopup();
-            }
-        }
-    }
-    $scope.continueShop = function(){
-        $state.go("menu");
-    }    
-    $scope.coupon ;
-    $scope.couponValue = 0;
-    var dfee = false;
-    $scope.validateImmediate = function(slot){
-        slot = JSON.parse(slot);
-        if (slot.startHrs == 99) {
-                dfee = true;
-                if (dfeeApplied) {
-                    $scope.deliveryFee = $scope.deliveryFee + 20;
-                    $scope.totalCost =$scope.totalCost+20;
-                }else{
-                    $scope.deliveryFee = 20;
-                    $scope.totalCost =$scope.totalCost+20;
-                }
-            }else{
-                if (dfee) {
-                    dfee = false;
-                    $scope.totalCost =$scope.totalCost-20;
-                    if (dfeeApplied) {
-                        $scope.deliveryFee = 15;
-                    }else{
-                        $scope.deliveryFee = 0;
-                    }
-                }
-            }
-    }
-    $scope.placeOrder = function(order){
-        if (authService.status) {
-            console.log(JSON.stringify($scope.cartList));
-            console.log(JSON.stringify(order));
-            var cartList = $scope.cartList;
-            var cList = cartList.map(function(obj){
-                delete obj.$$hashKey;
-                return obj;
-            });
-            
-            ttService.postOrder(authService.id,authService.token,JSON.stringify(cList),order.address,$scope.coupon,$scope.couponValue,$scope.totalCost,$scope.totalCost,order.deliveryDate,order.slot,order.msg,order.paymentMode,function(obj){
-                if (obj.status == "success") {
-                    storageService.set("order_summary",obj.data);
-                    if (obj.data.txn_type == "cod") {
-                        $state.go("confirm");
-                    }else{
-                        $state.go("txn_post");
-                    }
-                }else{
-                    alert("oops something went wrong..!")
-                }
-            });
-        }else{
-            showloginpopup();
-        }
-    };
-    function showloginpopup(){
-        var modalInstance = $modal.open({
-         templateUrl: 'loginpopup.html',
-         controller: 'loginModalCtrl',
-         size:'sm',
-         resolve: {
-             entity: function () {
-                 return $scope.entity;
-             }
-         }
-        });
-        modalInstance.result.then(function (selectedItem) {             
-
-        });
-    }
-
-}]);
 app.controller('menuCtrl', ['$rootScope','cartService','authService','$scope', 'ttService', '$state', '$stateParams', 'storageService', function ($rootScope,cartService,authService,$scope, ttService, $state, $stateParams, storageService) {
     $scope.cities = storageService.get('cities'); // get all cities from storage
     $scope.city = storageService.get('city');
@@ -460,6 +164,7 @@ app.controller('menuCtrl', ['$rootScope','cartService','authService','$scope', '
     $scope.categories = [];$scope.menuList = [];
     $rootScope.$broadcast("userLoginName",{});
     $rootScope.$broadcast("changeCount",{});
+    $rootScope.$broadcast("addressChange",{});
     getCat(loc._id);
     function getCat(locId){
         ttService.getCategories(locId, function (data) {
