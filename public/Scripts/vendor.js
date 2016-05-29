@@ -1,5 +1,5 @@
 
-var ip = "localhost",port=8085;
+var ip = "54.179.169.163",port=8085;
 var baseUrl = ip+":"+port;
 var url = "http://"+baseUrl+"/api/v1/user";
 
