@@ -46,6 +46,12 @@
         <li><span>Image 03</span><div><h3></h3></div></li>
         <li><span>Image 04</span><div><h3></h3></div></li>
     </ul> -->
+    <loader
+      working="isWorking"
+      disable-background="true"
+      message="message"
+      template="9">
+    </loader>
     <section class="" id="header-section">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
@@ -282,6 +288,24 @@
    </div>
 </script>
 <!-- angular model stop -->
+<!-- angular model start-->
+<script type="text/ng-template" id="subpopup.html">
+   <div class="confirm-delete-panel">
+       <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+           <h4 class="modal-title">Subscription</h4>
+       </div>
+       <div class="modal-body clearfix">
+              <div>
+                <strong>Successfully Subscribed .. Thank You</strong>.
+              </div>   
+       </div>
+       <div class="modal-footer">
+           <button class="btn btn-danger" ng-click="cancel()">Ok</button>
+       </div>
+   </div>
+</script>
+<!-- angular model stop -->
     <script src="Scripts/vendor/jquery.js"></script>
     <script src="Scripts/vendor/angular.min.js"></script>
     <script src="Scripts/vendor/angular.ui-router.min.js"></script>
@@ -290,6 +314,7 @@
     <script src="Scripts/vendor/angular-datepicker.min.js"></script>
     <script src="Scripts/vendor/angular-local-storage.min.js"></script>
     <script src="Scripts/vendor/linq.min.js"></script>
+    <script src="Scripts/vendor/ngLoader.js"></script>
     <script src="Scripts/vendor/ui-bootstrap-tpls-0.13.0.min.js"></script>
     <script src="Scripts/vendor/underscore.min.js"></script>
     <script src="Scripts/vendor/modernizr.custom.86080.js"></script>
@@ -297,6 +322,7 @@
     <script src="Scripts/app.js"></script>
     <script src="Scripts/controllers/indexCtrl.js"></script>
     <script src="Scripts/controllers/cartCtrl.js"></script>
+    <script src="Scripts/controllers/mainCtrl.js"></script>
     <script src="Scripts/ttservice.js"></script>
 
 </body>

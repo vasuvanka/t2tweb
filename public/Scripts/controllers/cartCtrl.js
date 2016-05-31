@@ -194,6 +194,8 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
     }
     $scope.minDate = new Date().getFullYear()+"-"+new Date().getMonth()+"-"+new Date().getDate();
     $scope.getSlots = function(){
+        storageService.set("ngLoader",{"isWorking":true,"message":"Slots ..."})
+        $rootScope.$emit("ngLoader",{});
         var date = new Date($scope.order.deliveryDate).getDate();
         var month = new Date($scope.order.deliveryDate).getMonth();
         var year = new Date($scope.order.deliveryDate).getFullYear();
@@ -230,6 +232,8 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
                                 }else{
                                     alert("Oops something went wrong...!")
                                 }
+                                storageService.set("ngLoader",{"isWorking":false,"message":"Slots ..."})
+                                $rootScope.$emit("ngLoader",{});
                             });
                     }else{
                         ttService.allSlots(function(data){
@@ -249,6 +253,8 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
                             }else{
                                 alert("Oops something went wrong...!")
                             }
+                            storageService.set("ngLoader",{"isWorking":false,"message":"Slots ..."})
+                            $rootScope.$emit("ngLoader",{});
                         })
                     }
                 }else{

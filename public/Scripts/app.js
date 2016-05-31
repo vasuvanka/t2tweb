@@ -3,7 +3,7 @@
 
 var app;
 
-app = angular.module('t2tApp', ['ui.router', 'ui.bootstrap', 'LocalStorageModule','720kb.datepicker']);
+app = angular.module('t2tApp', ['ui.router', 'ui.bootstrap', 'LocalStorageModule','720kb.datepicker','ngLoader']);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'localStorageServiceProvider', function ($stateProvider, $urlRouterProvider, $locationProvider, localStorageServiceProvider) {
     $urlRouterProvider.otherwise('/home');
@@ -152,91 +152,7 @@ app.controller('profileCtrl', ['cartService','$modal','$rootScope','authService'
     });
 }]);
 
-app.controller('menuCtrl', ['$rootScope','cartService','authService','$scope', 'ttService', '$state', '$stateParams', 'storageService', function ($rootScope,cartService,authService,$scope, ttService, $state, $stateParams, storageService) {
-    $scope.cities = storageService.get('cities'); // get all cities from storage
-    $scope.city = storageService.get('city');
-    var loc = storageService.get('loc');
-    if (loc == null) {
-        cartService.clearAll();
-        $state.go("home");
-    }
-    $scope.location = loc.location;
-    $scope.categories = [];$scope.menuList = [];
-    $rootScope.$broadcast("userLoginName",{});
-    $rootScope.$broadcast("changeCount",{});
-    $rootScope.$broadcast("addressChange",{});
-    getCat(loc._id);
-    function getCat(locId){
-        ttService.getCategories(locId, function (data) {
-        if (data.status == "success") {
-            $scope.categories = data.data;
-        } else {
-            alert("oops something went wrong!! refresh the page");
-        }
-        $scope.$apply();
-    });
-    }
-    $scope.getMenu = function(cat){
-        authService.location = loc;
-        if (authService.location != undefined || authService.location != "") {
-            ttService.getMenu(authService.location._id,cat,function(data){
-                if (data.status == "success") {
-                    $scope.menuList = data.data;
-                    storageService.set('menuList', data.data);
-                } else {
-                    alert("oops something went wrong!! refresh the page");
-                }
-                $scope.$apply();
-            });
-        }else{
-            $state.go("home");
-        }
-    }
-    $scope.countFunc=function(isIncr,item){
-        if (isIncr) {
-            item.product_id[0].qty = ++item.product_id[0].qty;
-            cartService.add(item.product_id[0]);
-        }else{
-            item.product_id[0].qty > 0 ? --item.product_id[0].qty : item.product_id[0].qty = 0;
-            cartService.remove(item.product_id[0]); 
-        }
-        $rootScope.$broadcast("changeCount",{});
-    }
 
-}]);
-
-app.controller('mainCtrl', [ '$rootScope','cartService','authService','$scope', 'ttService', '$state', 'storageService', function ($rootScope,cartService,authService,$scope, ttService, $state, storageService) {
-    $rootScope.$broadcast("userLoginName",{});
-    $rootScope.$broadcast("changeCount",{});
-    ttService.getCities(function (data) {
-        if(data.status == "success"){
-            storageService.set('cities', data.data);
-            $scope.cities = data.data;
-        }else{
-            alert("oops something went wrong!! refresh the page");
-        }
-        $scope.$digest();
-    })
-    $scope.getLoc = function (city) {
-        storageService.set('city', city);
-        authService.city = city;
-        ttService.getLocations(city, function (data) {
-            if (data.status == "success") {
-                storageService.set('locs', data.data);
-                $scope.locs = data.data;
-            } else {
-                alert("oops something went wrong!! refresh the page");
-            }
-        })
-    }
-
-    $scope.onSelect = function (item, model, label) {
-        cartService.clearAll();
-        authService.location = item;
-        storageService.set('loc', item);
-        $state.go('menu');
-    };
-}]);
 
 
 app.controller('baseController', [ '$rootScope','cartService' ,'$modal','storageService', 'authService' ,'$scope', 'ttService', function ($rootScope,cartService,$modal,storageService,authService ,$scope, ttService) {
@@ -245,6 +161,7 @@ app.controller('baseController', [ '$rootScope','cartService' ,'$modal','storage
     $rootScope.$on("changeCount",function(obj){
         $scope.count = cartService.count();
     });
+
     var node = storageService.get("userNode");
     if (node) {
             authService.id = node.id;
@@ -257,12 +174,18 @@ app.controller('baseController', [ '$rootScope','cartService' ,'$modal','storage
     $rootScope.$on("userLoginName",function(obj){
         $scope.username = authService.name;
     });
-    ttService.status(function (data) {
-        if(data.status == "success"){
-            $scope.status = data.data.isOpen;
-        }else{
-            alert("oops something went wrong!! refresh the page");
-        }
+    // ttService.status(function (data) {
+    //     if(data.status == "success"){
+    //         $scope.status = data.data.isOpen;
+    //     }else{
+    //         alert("oops something went wrong!! refresh the page");
+    //     }
+    // });
+
+    $rootScope.$on("ngLoader",function(obj){
+        var data = storageService.get("ngLoader")
+        $scope.message = data.message;
+        $scope.isWorking = data.isWorking; 
     });
 
     $scope.openLogin = function () {
