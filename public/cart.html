@@ -38,19 +38,22 @@
             <form name="cartForm" ng-submit="placeOrder(order)">
                     <div class="row gutter-bottom">
                         <div class="col-md-6">Choose delivery date</div>
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <input type="date" id="exampleInput" name="input" ng-model="order.deliveryDate" placeholder="yyyy-MM-dd" ng-change="getSlots()" class="form-control" required />
                            <div role="alert">
                              <span style="color : red" ng-show="cartForm.order.deliveryDate.$error.required
                                 && cartForm.$submitted">required</span>
                             </div>
-                        </div>
-
-                        <!-- <div class="col-md-6">
-                            <datepicker class="first" date-format="MM/dd/yyyy" date-min-limit="{{minLimit}}" date-max-limit="{{maxLimit}}">
-                                <input  type="text" ng-model="date">
-                            </datepicker>
                         </div> -->
+
+                             <div class="col-md-6">
+                                <p class="input-group">
+                                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                  <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                </p>
+                              </div>
                     </div>
                     <div class="row gutter-bottom">
                         <div class="col-md-6">Choose delivery time slot</div>
@@ -87,7 +90,10 @@
                     </div>
                     <div class="panel panel-default gutter-vertical" ng-repeat="address in addresses">
                       <div class="panel-body">
-                            <p>{{address.label}} <span class="pull-right">Select&nbsp;<input class="btn" type="radio" ng-model="order.address" name="address" value="{{address}}" required></span></p>
+                            <p>{{address.label}} <!-- <a href="" class="pull-right btn btn-small btn-default">Select</a> -->
+
+                                <input class="pull-right" type="radio" ng-model="order.address" name="address" value="{{address}}" required>&nbsp;<span class="pull-right">Select&nbsp;</span>
+                            </p>
                             <p>
                             {{address.lane1}}, 
                             {{address.lane2 || ""}},{{address.city}}, {{address.state}}. {{address.pincode}} 
@@ -108,9 +114,10 @@
                         <div class="col-md-12">Select Mode of Payment</div>
                     </div>
                     <div class="content-panel2">
-                        <div class="btn-group gutter-bottom" data-toggle="buttons">
-                            <label  ng-repeat="mode in paymentModeList">
-                              <input  type="radio" ng-model="order.paymentMode" value="{{mode}}"> {{mode.toUpperCase()}}
+                        <div class="btn-group1 gutter-bottom clearfix form-group" data-toggle="buttons">
+                            <label style="margin-right: 20px;"  ng-repeat="mode in paymentModeList">
+                              <input  type="radio" ng-model="order.paymentMode" id="{{mode}}" value="{{mode}}"> 
+                              <label for="{{mode}}">{{mode.toUpperCase()}}</label>
                             </label>
                         </div>
                         <div class="row text-center" style="height: 50px;">
@@ -128,3 +135,16 @@
         </div>
     </div>
 </section>
+
+<style>
+  .full button span {
+    background-color: limegreen;
+    border-radius: 32px;
+    color: black;
+  }
+  .partially button span {
+    background-color: orange;
+    border-radius: 32px;
+    color: black;
+  }
+</style>

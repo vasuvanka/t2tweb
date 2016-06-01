@@ -120,11 +120,15 @@ angular.module("t2tApp").controller('addressModalCtrl', ['$state','$rootScope','
      $scope.cancel = function () {
          $modalInstance.dismiss('cancel');
      };    
+     storageService.set("ngLoader",{"isWorking":false,"message":"Menu ..."})
+        $rootScope.$emit("ngLoader",{});
  }]);
 
 angular.module("t2tApp").controller('forgetModalCtrl', ['$state','$rootScope','ttService','storageService','authService','$scope', '$modalInstance', 'entity', function ($state,$rootScope,ttService,storageService,authService,$scope, $modalInstance, entity) {
      $scope.entity = entity;
      $scope.isError = false ;
+     storageService.set("ngLoader",{"isWorking":false,"message":"Menu ..."})
+    $rootScope.$emit("ngLoader",{});
      function validateEmail(email) 
 		{
 		    var re = /\S+@\S+\.\S+/;
@@ -132,6 +136,8 @@ angular.module("t2tApp").controller('forgetModalCtrl', ['$state','$rootScope','t
 		}
      $scope.retrive = function (email){
         if (validateEmail(email)) {
+            storageService.set("ngLoader",{"isWorking":true,"message":"Sending Email ..."})
+            $rootScope.$emit("ngLoader",{});
         	ttService.forgetPassword(email,function(resp){
         		if (resp.status == "error") {
         			$scope.success = "";
@@ -142,6 +148,8 @@ angular.module("t2tApp").controller('forgetModalCtrl', ['$state','$rootScope','t
         			$scope.isError = true ;
         			$scope.success = "email sent";
         		}
+                storageService.set("ngLoader",{"isWorking":false,"message":" ..."})
+                $rootScope.$emit("ngLoader",{});
         		$scope.$apply();
         	});
         }else{
@@ -160,6 +168,8 @@ angular.module("t2tApp").controller('errorModalCtrl', ['$state','$rootScope','tt
      $scope.cancel = function () {
          $modalInstance.dismiss('cancel');
      };    
+    storageService.set("ngLoader",{"isWorking":false,"message":" ..."})
+    $rootScope.$emit("ngLoader",{});
  }]);
 
 angular.module("t2tApp").controller('codModalCtrl', ['$state','$rootScope','ttService','storageService','authService','$scope', '$modalInstance', 'entity', function ($state,$rootScope,ttService,storageService,authService,$scope, $modalInstance, entity) {
@@ -167,11 +177,15 @@ angular.module("t2tApp").controller('codModalCtrl', ['$state','$rootScope','ttSe
      $scope.cancel = function () {
          $modalInstance.dismiss('cancel');
      };
+    storageService.set("ngLoader",{"isWorking":false,"message":"Menu ..."})
+    $rootScope.$emit("ngLoader",{});
      $scope.msg = "";
      $scope.checked = false;
      $scope.updateOrder = function(){
         var order = storageService.get("order_summary");
         if (order) {
+            storageService.set("ngLoader",{"isWorking":true,"message":"Placing Order..."})
+            $rootScope.$emit("ngLoader",{});
             ttService.updateOrder(authService.id,authService.token,order._id,{txn_type:"cod"},function(obj){
                 if (obj.status == "success") {
                     $scope.msg = "order placed";
@@ -180,6 +194,8 @@ angular.module("t2tApp").controller('codModalCtrl', ['$state','$rootScope','ttSe
                 }else{
                     $scope.msg = "Ooops Place Order Again";
                 }
+                storageService.set("ngLoader",{"isWorking":false,"message":" ..."})
+                $rootScope.$emit("ngLoader",{});
                 $scope.$apply();
             })
         }

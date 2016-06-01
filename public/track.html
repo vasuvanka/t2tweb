@@ -5,22 +5,15 @@
                     <div class="alert alert-info text-center text-uppercase" role="alert">
                       <h4 style="margin-bottom: 0;">Tracking</h4>
                     </div>
-                    <div class="clearfix row"> 
-                                           
-                        <div class="col-md-4">                        
+                    <div class="clearfix"> 
+                        <div class="col-md-6 center-block" style="float: none; padding: 50px 0 100px;">
+                            <div class="col-md-8"> 
+                                <input type="text" class="form-control input-lg gutter-bottom" aria-label="..." placeholder="Enter Order Number" ng-model="trackId">
+                            </div>
+                            <div class="col-md-4">
+                                <button ng-click="getTrackingData(trackId)" class="btn btn-lg btn-primary btn-block">Track</button>                            </div>
                         </div>
-                        <div class="col-md-3 row"> 
-                            <input type="text" class="form-control input-lg" aria-label="..." placeholder="Enter Order Number" ng-model="trackId">
-                        </div>
-                        <div class="col-md-2 row">
-                            <button ng-click="getTrackingData(trackId)" class="btn btn-lg btn-primary">Track</button>
-                        </div>
-                        <div>
-                            
-                        </div>                       
-                        </div>
-                        <div class="col-md-2">                        
-                        </div>
+                    </div>
                          
                             <!-- <div class="col-md-6 center-block" style="float: none">
                                 <div class="clearfix gutter-bottom">

@@ -50,9 +50,9 @@
       working="isWorking"
       disable-background="true"
       message="message"
-      template="9">
+      template="5">
     </loader>
-    <section class="" id="header-section">
+    <section class="clearfix" id="header-section">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -64,7 +64,7 @@
                     </button>
                     <a class="navbar-brand" ui-sref="home">
                         <!-- <img src="images/time2tiffin-logo.png" alt="time2tiffin.in"> -->
-                        <img src="images/time2tiffin-logo-round.png" height="150" width="150" alt="time2tiffin.in">
+                        <img src="images/time2tiffin-logo-round.png" alt="time2tiffin.in">
 
                     </a>
                 </div>
@@ -93,9 +93,50 @@
 
     </section>
 
-     <div ui-view=""></div>
+    <section ui-view=""></section>
 
-   
+   <section ng-class="{'white-bg footer':!isHome,'white-bg footer relative':isHome}">
+        <footer class="container">
+            <div class="col-md-5 border-right">
+                <p class="text-primary">Let us show you how we can help</p>
+                <div class="gutter-bottom">
+                    
+                    <form name="subForm" ng-submit="subscribe(email)">
+                      <div class="input-group">
+                        <input type="email" class="form-control" ng-model="email" placeholder="Search for..." required>
+                        <span class="input-group-btn">
+                            <input class="btn btn-primary" type="submit">
+                        </span>
+                      </div>
+                    </form>
+                    
+                </div>
+                <div class="clearfix gutter-bottom">
+                    <a href=""><img src="images/facebook.png" alt="Facebook"></a>
+                    <a href=""><img src="images/twitter.png" alt="Twitter"></a>
+                  <!--   <a href=""><img src="images/instagram.png" alt="Instagram"></a>
+                    <a href=""><img src="images/pinterest.png" alt="Pinterest"></a> -->
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="clearfix">
+                    <div class="pull-left gutter-bottom">
+                        <img src="images/cards.jpg" alt="Cards" class="img-responsive">
+                    </div>
+                    <div class="pull-right gutter-bottom">
+                      <a href=""><img src="images/google-play-badge.png" alt="Google Play"></a>
+                      <a href=""><img src="images/app-store-badge.png" alt="Appile Play Store"></a>
+                    </div>
+                </div>
+                <div class="clearfix gutter-bottom">
+                    <a ui-sref="jobs">Jobs</a> | <a ui-sref="tandc">Terms and conditions</a> | <a ui-sref="faq">FAQ and Help Center</a>
+                </div>
+                <div class="clearfix text-right">
+                    2016&nbsp; &copy;&nbsp; Time2Tiffin&nbsp;(Ranjith Software Labs Pvt Ltd)
+                </div>
+            </div>
+        </footer>
+    </section>
 
     
 <!-- angular model start-->

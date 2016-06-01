@@ -3,7 +3,7 @@
 
 var app;
 
-app = angular.module('t2tApp', ['ui.router', 'ui.bootstrap', 'LocalStorageModule','720kb.datepicker','ngLoader']);
+app = angular.module('t2tApp', ['ui.router', 'ui.bootstrap', 'LocalStorageModule','ngLoader']);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'localStorageServiceProvider', function ($stateProvider, $urlRouterProvider, $locationProvider, localStorageServiceProvider) {
     $urlRouterProvider.otherwise('/home');
@@ -30,6 +30,8 @@ app.controller('trackCtrl', ['cartService','$rootScope','authService','$scope', 
     $scope.isTracking = false;
     $scope.trackInfo;
     $scope.isError = false;
+    // $scope.isHome = true;
+    $rootScope.$broadcast("bannnerNonRelitive",{});
     $scope.getTrackingData = function(trackId){
         if (trackId == undefined || trackId == null || trackId == "") {
             $scope.isError = true;
@@ -70,8 +72,10 @@ app.controller('trackCtrl', ['cartService','$rootScope','authService','$scope', 
 app.controller('profileCtrl', ['cartService','$modal','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$modal,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
     $scope.changeFlag = false;
+    // $scope.isHome = true;
     $scope.couponMsg = "";
     $rootScope.$broadcast("addressChange",{});
+    $rootScope.$broadcast("bannnerRelitive",{});
     $scope.isCouponError = false;
     if (node) {
         $scope.username = authService.name;
@@ -143,13 +147,24 @@ app.controller('profileCtrl', ['cartService','$modal','$rootScope','authService'
     $scope.bookings = [];
     ttService.getOrders(authService.id,authService.token,function(res){
         if (res.status == "success") {
-            $scope.bookings = res.data;
-            console.log()
-            $scope.$apply(res.data);
+            $scope.bookings = convertDateToLocal(res.data);
+            $scope.$apply();
         }else{
             alert("Ooops something went wrong ..!")
         }
     });
+    function convertDateToLocal(list){
+        var rlist = list.map(function(obj){
+            var currentTime = new Date(obj.createdAt);
+            var currentOffset = currentTime.getTimezoneOffset();
+            var ISTOffset = 330;   // IST offset UTC +5:30 
+            var dte = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
+            obj.createdAt = dte.toLocaleString();
+            return obj;
+        });
+        return rlist;
+    }
+
 }]);
 
 
@@ -161,7 +176,13 @@ app.controller('baseController', [ '$rootScope','cartService' ,'$modal','storage
     $rootScope.$on("changeCount",function(obj){
         $scope.count = cartService.count();
     });
-
+    
+    $rootScope.$on("bannnerRelitive",function(obj){
+        $scope.isHome = true;
+    });
+    $rootScope.$on("bannnerNonRelitive",function(obj){
+        $scope.isHome = false;
+    });
     var node = storageService.get("userNode");
     if (node) {
             authService.id = node.id;

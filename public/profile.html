@@ -8,17 +8,23 @@
                           <i class="fa fa-user fa-stack-1x fa-inverse"></i>
                         </div>
                         <div class="pull-left">
-                        <div class="center-block">
-                          <h4 ng-show="!changeFlag">{{user.firstname}} &nbsp; {{user.lastname}}</h4><a href="" ng-click="changeFlag = !changeFlag"><span ng-show="!changeFlag" class="glyphicon glyphicon-edit"></span></a>
-                        </div>
-                          
-                          
-                          <div ng-show="changeFlag" class="row">
-                            <input type="text" ng-model="user.firstname" placeholder="First Name"><input type="text" ng-model="user.lastname" placeholder="Last Name"><button ng-click="updateName(user.firstname,user.lastname)" class="btn btn-xs btn-primary">Update</button>
-                          
-                        </div>
-                            <p>{{user.email}}</p>
-                            <p>{{user.phone}}</p>
+                          <div class="center-block">
+                            <div class="col-md-12">
+                              <h4 class="pull-left" ng-show="!changeFlag">{{user.firstname}} &nbsp; {{user.lastname}}</h4>
+                              <h4 class="pull-left" style="margin-left: 10px;"><a href="" ng-click="changeFlag = !changeFlag"><span ng-show="!changeFlag" class="glyphicon glyphicon-edit"></span></a></h4>
+                            </div>
+                          </div>
+                            
+                            
+                            <div ng-show="changeFlag" class="row">
+                              <div class="col-md-12">
+                                <div class="col-md-5"><input type="text" class="form-control" ng-model="user.firstname" placeholder="First Name"></div>
+                                <div class="col-md-5"><input type="text" class="form-control" ng-model="user.lastname" placeholder="Last Name"></div>
+                                <div class="col-md-2"><button ng-click="updateName(user.firstname,user.lastname)" class="btn btn-sm btn-primary">Update</button></div>
+                              </div>
+                          </div>
+                          <div class="col-md-12">{{user.email}}</div>
+                          <div class="col-md-12">{{user.phone}}</div>
                         </div>    
                     </div>   
                 </div>
@@ -50,6 +56,7 @@
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th>Again</th>
+                                <th>View</th>
                               </tr>
                               <tr ng-repeat="booking in bookings">
                                 <td data-th="Date">{{booking.createdAt}}</td>
@@ -57,6 +64,7 @@
                                 <td data-th="Amount">{{booking.finalPrice}}</td>
                                 <td data-th="Status"><span ng-class="{'label label-success':booking.status == 'success' ,'label label-danger':booking.status == 'cancelled' ,'label label-warning':booking.status == 'pending'  }">{{booking.status}}</span></td>
                                 <td data-th="repeat"><a href="" class="success" ng-click="reorder(booking)">Repeat</a></td>
+                                <td><a href="" class="primary" ng-click="view(booking)">View</a></td>
                               </tr>
                               <!-- <tr>
                                 <td data-th="Date">01/05/2015</td>

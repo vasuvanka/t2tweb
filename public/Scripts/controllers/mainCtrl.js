@@ -1,6 +1,8 @@
 angular.module("t2tApp").controller('menuCtrl', ['$rootScope','cartService','authService','$scope', 'ttService', '$state', '$stateParams', 'storageService', function ($rootScope,cartService,authService,$scope, ttService, $state, $stateParams, storageService) {
     $scope.cities = storageService.get('cities'); // get all cities from storage
     $scope.city = storageService.get('city');
+    // $scope.isHome = true;
+    $rootScope.$broadcast("bannnerRelitive",{});
     var loc = storageService.get('loc');
     if (loc == null) {
         cartService.clearAll();
@@ -62,6 +64,8 @@ angular.module("t2tApp").controller('menuCtrl', ['$rootScope','cartService','aut
 angular.module("t2tApp").controller('mainCtrl', [ '$modal','$rootScope','cartService','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,$rootScope,cartService,authService,$scope, ttService, $state, storageService) {
     $rootScope.$broadcast("userLoginName",{});
     $rootScope.$broadcast("changeCount",{});
+    $rootScope.$broadcast("bannnerNonRelitive",{});
+    // $scope.isHome = true;
     // ttService.getCities(function (data) {
     //     if(data.status == "success"){
     //         storageService.set('cities', data.data);

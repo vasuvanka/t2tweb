@@ -1,5 +1,6 @@
 angular.module("t2tApp").controller('txnCtrl', ['cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function (cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
+    $scope.isHome = false;
     $rootScope.$broadcast("userLoginName",{});
     var order = storageService.get("order_summary");
     if (node && order) {
@@ -8,14 +9,17 @@ angular.module("t2tApp").controller('txnCtrl', ['cartService','$rootScope','auth
     }else{
         $state.go("home");
     }
+    $rootScope.$broadcast("bannnerRelitive",{});
 
 }]);
 angular.module("t2tApp").controller('confirmCtrl', ['$modal','cartService','$rootScope','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,cartService,$rootScope,authService,$scope, ttService, $state, storageService) {
     var node = storageService.get("userNode");
+    $scope.isHome = false;
     cartService.clearAll();
     $scope.msg = "";
     $rootScope.$broadcast("changeCount",{});
     $rootScope.$broadcast("userLoginName",{});
+    $rootScope.$broadcast("bannnerRelitive",{});
       $scope.logout = function(){
         ttService.logout(authService.id,authService.token,function(obj){
             if (obj.status == "success") {
@@ -134,10 +138,12 @@ angular.module("t2tApp").controller('confirmCtrl', ['$modal','cartService','$roo
 
 angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartService','authService','$scope', 'ttService', '$state', 'storageService', function ($modal,$rootScope,cartService,authService,$scope, ttService, $state, storageService) {
     $scope.slots = [];
+    $scope.isHome = false;
     var slots = [];
     $scope.order = {
         'paymentMode':'cod'
     };
+    $rootScope.$broadcast("bannnerRelitive",{});
       $scope.logout = function(){
         ttService.logout(authService.id,authService.token,function(obj){
             if (obj.status == "success") {
@@ -200,8 +206,9 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
         var month = new Date($scope.order.deliveryDate).getMonth();
         var year = new Date($scope.order.deliveryDate).getFullYear();
         var d = new Date();
-        if (year == d.getFullYear()) {
+        if (year >= d.getFullYear()) {
             if (month >= d.getMonth()) {
+
                 if (date>= d.getDate()) {
                     if (date == d.getDate()) {
                             ttService.slots(function(data){
@@ -225,15 +232,19 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
                                         slotList.push({text:slotText,value:slot});
                                     });
                                     $scope.slots = slotList;
+                                    storageService.set("ngLoader",{"isWorking":false,"message":"Slots ..."});
+                                    $rootScope.$emit("ngLoader",{});
                                     }else{
                                         $scope.slots = [];
+                                        storageService.set("ngLoader",{"isWorking":false,"message":"Slots ..."});
+                                        $rootScope.$emit("ngLoader",{});
                                     }
                                     $scope.$digest();
                                 }else{
                                     alert("Oops something went wrong...!")
                                 }
-                                storageService.set("ngLoader",{"isWorking":false,"message":"Slots ..."})
-                                $rootScope.$emit("ngLoader",{});
+                                
+                                
                             });
                     }else{
                         ttService.allSlots(function(data){
@@ -406,5 +417,93 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
 
         });
     }
+    // date picker
+    $scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.clear = function() {
+    $scope.dt = null;
+  };
+
+  $scope.inlineOptions = {
+    customClass: getDayClass,
+    minDate: new Date(),
+    showWeeks: true
+  };
+
+  $scope.dateOptions = {
+    dateDisabled: disabled,
+    formatYear: 'yy',
+    maxDate: new Date(2020, 5, 22),
+    minDate: new Date(),
+    startingDay: 1
+  };
+
+  // Disable weekend selection
+  function disabled(data) {
+    var date = data.date,
+      mode = data.mode;
+    return mode === 'day' && (date.getDay() === 0);
+  }
+
+  $scope.toggleMin = function() {
+    $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+    $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+  };
+
+  $scope.toggleMin();
+
+  $scope.open1 = function() {
+    $scope.popup1.opened = true;
+  };
+
+
+  $scope.setDate = function(year, month, day) {
+    $scope.dt = new Date(year, month, day);
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+  $scope.altInputFormats = ['M!/d!/yyyy'];
+
+  $scope.popup1 = {
+    opened: false
+  };
+
+
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var afterTomorrow = new Date();
+  afterTomorrow.setDate(tomorrow.getDate() + 1);
+  $scope.events = [
+    {
+      date: tomorrow,
+      status: 'full'
+    },
+    {
+      date: afterTomorrow,
+      status: 'partially'
+    }
+  ];
+
+  function getDayClass(data) {
+    var date = data.date,
+      mode = data.mode;
+    if (mode === 'day') {
+      var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+      for (var i = 0; i < $scope.events.length; i++) {
+        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+        if (dayToCheck === currentDay) {
+          return $scope.events[i].status;
+        }
+      }
+    }
+
+    return '';
+  }
 
 }]);
