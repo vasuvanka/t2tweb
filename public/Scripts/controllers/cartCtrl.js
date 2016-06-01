@@ -20,28 +20,6 @@ angular.module("t2tApp").controller('confirmCtrl', ['$modal','cartService','$roo
     $rootScope.$broadcast("changeCount",{});
     $rootScope.$broadcast("userLoginName",{});
     $rootScope.$broadcast("bannnerRelitive",{});
-      $scope.logout = function(){
-        ttService.logout(authService.id,authService.token,function(obj){
-            if (obj.status == "success") {
-                storageService.clearAll();
-                authService.name = '';
-                authService.status = false;
-                authService.token = '';
-                authService.id = '';
-                authService.address = [];
-                $rootScope.$broadcast("changeCount",{});
-                $rootScope.$broadcast("addressChange",{});
-                $rootScope.$broadcast("logoutActivity",{});
-                $scope.username = authService.name;
-            }else{
-                if (obj.error[0] == "106") {
-                    storageService.clearAll();
-                }
-                $scope.error = "try again !!";
-            }
-            $scope.$apply();
-        })
-    }
     $scope.trackOrder = function(order_num){
         storageService.set("order_num",order_num);
         $state.go("track");
@@ -418,14 +396,11 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
         });
     }
     // date picker
-    $scope.today = function() {
+ $scope.today = function() {
     $scope.dt = new Date();
   };
   $scope.today();
 
-  $scope.clear = function() {
-    $scope.dt = null;
-  };
 
   $scope.inlineOptions = {
     customClass: getDayClass,
@@ -445,7 +420,7 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
   function disabled(data) {
     var date = data.date,
       mode = data.mode;
-    return mode === 'day' && (date.getDay() === 0);
+    return mode === 'day' && ( date.getDay() === 0);
   }
 
   $scope.toggleMin = function() {
@@ -460,17 +435,17 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
   };
 
 
-  $scope.setDate = function(year, month, day) {
-    $scope.dt = new Date(year, month, day);
-  };
+  // $scope.setDate = function(year, month, day) {
+  //   $scope.dt = new Date(year, month, day);
+  // };
 
-  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  $scope.format = $scope.formats[0];
+
   $scope.altInputFormats = ['M!/d!/yyyy'];
 
   $scope.popup1 = {
     opened: false
   };
+
 
 
   var tomorrow = new Date();

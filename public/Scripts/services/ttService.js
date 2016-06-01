@@ -1,12 +1,4 @@
 'use strict';
-
-/**
- * @ngdoc service
- * @name time2tiffinApp.ttService
- * @description
- * # ttService
- * Service in the time2tiffinApp.
- */
 angular.module('t2tApp')
   .factory('ttService', function () {
     var t2tService = {};
