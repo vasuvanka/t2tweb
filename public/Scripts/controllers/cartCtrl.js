@@ -122,44 +122,24 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
         'paymentMode':'cod'
     };
     $rootScope.$broadcast("bannnerRelitive",{});
-      $scope.logout = function(){
-        ttService.logout(authService.id,authService.token,function(obj){
-            if (obj.status == "success") {
-                storageService.clearAll();
-                authService.name = '';
-                authService.status = false;
-                authService.token = '';
-                authService.id = '';
-                authService.address = [];
-                $rootScope.$broadcast("changeCount",{});
-                $rootScope.$broadcast("addressChange",{});
-                $rootScope.$broadcast("logoutActivity",{});
-                $scope.username = authService.name;
-            }else{
-                if (obj.error[0] == "106") {
-                    storageService.clearAll();
-                }
-                $scope.error = "try again !!";
-            }
-            $scope.$apply();
-        })
-    }
     $rootScope.$broadcast("addressChange",{});
     $scope.paymentModeList = ['cod','paytm'];
     $rootScope.$broadcast("userLoginName",{});
     var node = storageService.get("userNode");
     $scope.cartList = cartService.getCart();
-    $rootScope.$on('addressChange',function(obj){
-        var node = storageService.get("userNode");
-        if (node) {
-            $scope.addresses = node.address;
+    ttService.getProfile(authService.id,authService.token,function(obj){
+        if (obj.status == "success") {
+              $scope.addresses = obj.data.address;
         }else{
-            $scope.addresses = [];
+            if (obj.error[0] == "106") {
+                storageService.clearAll();
+                authService.status = false;
+                $state.go("home");
+            }
         }
-        console.log($scope.addresses);
         $scope.$apply();
-    });
-    $scope.addresses = authService.address;
+    })
+    // $scope.addresses = authService.address;
     $scope.isValidCoupon = false;
     var openErrorDialog = function () {
         var modalInstance = $modal.open({
@@ -176,10 +156,25 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
 
         });
     }
+    var openNoDialog = function(){
+        var modalInstance = $modal.open({
+         templateUrl: 'noslotspopup.html',
+         controller: 'errorModalCtrl',
+         size:"sm",
+         resolve: {
+             entity: function () {
+                 return $scope.entity;
+             }
+         }
+        });
+        modalInstance.result.then(function (selectedItem) {             
+
+        });      
+    }
     $scope.minDate = new Date().getFullYear()+"-"+new Date().getMonth()+"-"+new Date().getDate();
     $scope.getSlots = function(){
-        storageService.set("ngLoader",{"isWorking":true,"message":"Slots ..."})
-        $rootScope.$emit("ngLoader",{});
+        // storageService.set("ngLoader",{"isWorking":true,"message":"Slots ..."})
+        // $rootScope.$emit("ngLoader",{});
         var date = new Date($scope.order.deliveryDate).getDate();
         var month = new Date($scope.order.deliveryDate).getMonth();
         var year = new Date($scope.order.deliveryDate).getFullYear();
@@ -210,12 +205,13 @@ angular.module("t2tApp").controller('cartCtrl', ['$modal','$rootScope','cartServ
                                         slotList.push({text:slotText,value:slot});
                                     });
                                     $scope.slots = slotList;
-                                    storageService.set("ngLoader",{"isWorking":false,"message":"Slots ..."});
-                                    $rootScope.$emit("ngLoader",{});
+                                    // storageService.set("ngLoader",{"isWorking":false,"message":"Slots ..."});
+                                    // $rootScope.$emit("ngLoader",{});
                                     }else{
                                         $scope.slots = [];
-                                        storageService.set("ngLoader",{"isWorking":false,"message":"Slots ..."});
-                                        $rootScope.$emit("ngLoader",{});
+                                        openNoDialog();
+                                        // storageService.set("ngLoader",{"isWorking":false,"message":"Slots ..."});
+                                        // $rootScope.$emit("ngLoader",{});
                                     }
                                     $scope.$digest();
                                 }else{

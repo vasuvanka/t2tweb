@@ -21,6 +21,9 @@ angular.module("t2tApp").controller('regModalCtrl', ['$rootScope','ttService','$
      };    
  }]);
 
+angular.module("t2tApp").controller('csCtrl', ['$scope','$rootScope', function ($scope,$rootScope) {
+    $rootScope.$broadcast("bannnerRelitive",{});
+}]);
 angular.module("t2tApp").controller('loginModalCtrl', ['$modal','$rootScope','ttService','storageService','authService','$scope', '$modalInstance', 'entity', function ($modal,$rootScope,ttService,storageService,authService,$scope, $modalInstance, entity) {
      $scope.entity = entity;
      $scope.openSignUp = function(){

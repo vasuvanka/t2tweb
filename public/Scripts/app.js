@@ -10,7 +10,7 @@ angular.module('t2tApp', ['ui.router', 'ui.bootstrap', 'LocalStorageModule','ngL
     .state('cart', { url: '/cart', templateUrl: '/cart.html',controller: 'cartCtrl' })
     .state('track', { url: '/track', templateUrl: '/track.html',controller: 'trackCtrl' })
     .state('faq', { url: '/faqandhelpline', templateUrl: '/faq.html' })
-    .state('cs', { url: '/customercare', templateUrl: '/cs.html' })
+    .state('cs', { url: '/customercare', templateUrl: '/cs.html' ,controller: 'csCtrl'})
     .state('policy', { url: '/policy', templateUrl: '/policy.html' })
     .state('aboutus', { url: '/aboutus', templateUrl: '/aboutus.html' })
     .state('jobs', { url: '/careers', templateUrl: '/jobs.html' })

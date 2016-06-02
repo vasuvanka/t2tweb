@@ -14,23 +14,48 @@
                         For any query or support, we can be reached at Contact Number: +91-809-990-6000
                         Email: care@time2tiffin.in
                     </p>
-                    <p><h3 ng-class="{'success':order.status == 'pending','danger':order.status == 'cancelled'}">
+                    <h3 ng-class="{'success':order.status == 'pending','danger':order.status == 'cancelled'}" style="margin:35px 0px 45px">
                         <strong>{{msg}}</strong>
-                    </h3> </p>
+                    </h3>
                 </center>
             </div>
             <div class="clearfix row">
                 <div class="col-md-4">
                     <h4>Order Summary</h4>
-                    <p>
+                    <div class="gutter-bottom clearfix">
+                    <!-- <div class="row clearfix">
+                        <div class="col-md-4 col-xs-4">Order Number</div>
+                        <div class="col-md-8 coll-xs-8">{{order.order_num}}</div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-4 col-xs-4">Order Date</div>
+                        <div class="col-md-8 coll-xs-8">{{od_date}}</div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-4 col-xs-4">Delivery Date</div>
+                        <div class="col-md-8 coll-xs-8">{{dl_date}}</div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-4 col-xs-4">Time Slot</div>
+                        <div class="col-md-8 coll-xs-8">{{slot}}</div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-4 col-xs-4">Payment Method</div>
+                        <div class="col-md-8 coll-xs-8">{{order.txn_type.toUpperCase()}}</div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-4 col-xs-4">Comment</div>
+                        <div class="col-md-8 coll-xs-8">{{order.msg}}</div>
+                    </div> -->
                         Order Number:<strong>{{order.order_num}}</strong> <br>
                         Order date: <strong>{{od_date}}</strong><br>
                         Delivery date:<strong>{{dl_date}}</strong> <br>
                         Delivery Time Slot: <strong>{{slot}}</strong><br>
-                        Payment Method: {{order.txn_type.toUpperCase()}}<br>
+                        Payment Method: <strong class="label label-info">{{order.txn_type.toUpperCase()}}</strong><br>
                         Comment : {{order.msg}}
-
-                    </p>
+                        <br>
+                        
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <h4>Shipping Address</h4>
@@ -42,12 +67,12 @@
                         Pin Code: {{order.address.postalCode}}
                     </p>
                 </div>
-                <div class="col-md-4 pull right">
-                    <a href="" ng-click="trackOrder(order.order_num)">
-                    <h4>Track Your Order</h4>
-                    <p>
-                        <div class="status3 success">&nbsp;</div>
-                    </p></a>
+                <div class="col-md-3 text-center" style="padding:30px 0 0">
+                    <div class="gutter-bottom status3 success">&nbsp;</div>
+                    Order Number:<strong>{{order.order_num}}</strong> <br><br>
+                    <a href="" class="btn btn-sm btn-primary" ng-click="trackOrder(order.order_num)">
+                    Track Your Order
+                    </a>
                 </div>
             </div>
             <div class="clearfix">

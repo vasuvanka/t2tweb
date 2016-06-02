@@ -93,7 +93,6 @@ body{
 }
 .list-thumb{
     height: 400px;
-	margin-bottom: 20px;
 }
 .list-thumb .image-holder{
     padding: 10px 0;
@@ -102,15 +101,14 @@ body{
     overflow: hidden;
 }
 .list-thumb .image-holder .price{
-    background-color: rgba(0,0,0,0.7);
-    padding: 10px 15px;
+    background-color: #000;
+    padding: 10px;
     position: absolute;
     bottom: 20px;
     left: 0;
     color: #fff;
-	border-radius: 0 5px 5px 0;
 }
-/*.list-thumb .image-holder .veg,
+.list-thumb .image-holder .veg,
 .list-thumb .image-holder .nonveg{
     background-color: #000;
     padding: 5px;
@@ -135,22 +133,6 @@ body{
 }
 .list-thumb .image-holder .nonveg:after{
     background-color:red;
-}*/
-.list-thumb .image-holder .veg,
-.list-thumb .image-holder .nonveg{
-    padding: 5px;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 31px;
-    height: 31px;
-}
-
-.list-thumb .image-holder .veg{
-    background-image: url(../images/veg_icon.png);
-}
-.list-thumb .image-holder .nonveg{
-    background-image: url(../images/non_veg_icon.png);
 }
 .list-thumb h3{
     margin: 5px 0;
@@ -393,29 +375,7 @@ body{
 .text-success{
     color: #1e9a46;
 }
-.decrement,
-.increment{
-	width: 31px;
-	height: 31px;
-	display: inline-block;
-	float: left;
-}
-.quantity{
-	background-image: url(../../images/value-cirlce.png);
-	width: 31px;
-	height: 31px;
-	text-align: center;
-	display: inline-block;
-	color: #fff;
-	float: left;
-	margin: 0 10px;
-	font-size: 16px;
-	line-height: 30px;
-}
-.quantity-container{
-	width: 118px;
-	margin: 0 auto;
-}
+
 @media (min-width: 768px){
     .status1{
         background-image: url(../../images/status-1.png);
@@ -423,7 +383,7 @@ body{
         background-position: 0 0;
         background-size: 80px 200px;
         width: 80px;
-        height: 80px;
+        height: 82px;
         float: left;
     }
     .status1.success,
@@ -438,7 +398,7 @@ body{
         background-position: 0 0;
         background-size: 80px 200px;
         width: 80px;
-        height: 80px;
+        height: 82px;
         float: left;
         margin-left: -2px;
     }
@@ -448,7 +408,7 @@ body{
         background-position: 0 0;
         background-size: 80px 200px;
         width: 80px;
-        height: 80px;
+        height: 82px;
         float: left;
         margin-left: -2px;
     }
@@ -458,7 +418,7 @@ body{
         background-position: 0 0;
         background-size: 80px 200px;
         width: 80px;
-        height: 80px;
+        height: 82px;
         float: left;
         margin-left: -2px;
     }
